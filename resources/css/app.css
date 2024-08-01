@@ -1,0 +1,11 @@
+.container1{
+    margin-top: 2%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%; /* o cualquier ancho */
+    background-color: white;
+    
+}
+input{
+    height: 5%;
+}
