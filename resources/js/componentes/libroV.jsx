@@ -52,7 +52,7 @@ export const LibroV = () => {
                     </tbody>
                 </table>
             </div>
-            <div className="formulario d-flex">
+            <div className="formulario mt-5  d-flex justify-content-center">
                 <div className='Datos col-md-4'>
                     <div className=' row '>
                         <p className='col-sm-5'>N de Factura</p>
@@ -139,64 +139,122 @@ export const LibroV = () => {
                         <input className='col-sm-6' type="text" />
                     </div>
                 </div>
-                <div className='Datos2 col-md-5'>
+                <div className='Datos2 col-md-4'>
 
-                    <div className="row">
-                        <div className='col-sm-5'>
-                            <p>Documento</p>
-                            <select name="" id="">
-                                <option value="Factura">Factura</option>
-                                <option value="Nota de Credito">Nota de Credito</option>
-                                <option value="Nota de Debito">Nota de Debito</option>
-                                <option value="Caja registradora">Caja registradora</option>
-                            </select>
-                        </div>
-                        <div className='col-sm-6'>
-                            <p>Tipo de Factura Polar</p>
-                            <select name="" id="">
-                                <option value="Factura">Factura</option>
-                                <option value="Nota de Credito">Nota de Credito</option>
-                                <option value="Nota de Debito">Nota de Debito</option>
-                                <option value="Caja registradora">Caja registradora</option>
-                            </select>
-                        </div>
+                    <div className="row ">
+                        <p className='row'>Documento</p>
+                        <select className='col-md-6' name="" id="">
+                            <option value="Factura">Factura</option>
+                            <option value="Nota de Credito">Nota de Credito</option>
+                            <option value="Nota de Debito">Nota de Debito</option>
+                            <option value="Caja registradora">Caja registradora</option>
+                        </select>
                     </div>
-                    <div className="row mt-3">
-                        <p className='col-sm-5'>Reducida</p>
+                    <div className="row mt-3 pb-3 ">
+                        <p className='row'>Tipo de Factura Polar</p>
+                        <select className='col-md-6' name="" id="">
+                            <option value="Factura">Factura</option>
+                            <option value="Nota de Credito">Nota de Credito</option>
+                            <option value="Nota de Debito">Nota de Debito</option>
+                            <option value="Caja registradora">Caja registradora</option>
+                        </select>
+
+                    </div>
+                    <br /><br /><br /><br />
+                    <div className="row mt-4 ">
+                        <p className='col-sm-7'>Reducida</p>
                         <input className='col-sm-5' type="text" />
                     </div>
                     <div className="row ">
-                        <p className='col-sm-5'>Electronica</p>
+                        <p className='col-sm-7'>Electronica</p>
                         <input className='col-sm-5' type="text" />
                     </div>
                     <div className="row ">
-                        <p className='col-sm-5'>General</p>
-                        <select   name="" id="">
+                        <p className='col-sm-7  '>General</p>
+
+                        <select className='col-5 align-self-start ' name="" id="">
                             <option value="16">16</option>
                             <option value="8">8</option>
                             <option value="31">31</option>
                             <option value="12">12</option>
                         </select>
+
                     </div>
-                    <div className="row mt-3">
-                        <button className='col-sm-4'>Calcular base</button>
-                        <p className='col-sm-4'>Electronica</p>
-                        <input className='col-sm-3' type="text" />
+                    <br />
+                    <div className="row mt-2 ">
+
+                        <p className='col-sm-7'>TASA</p>
+                        <input className='col-sm-5' type="text" />
                     </div>
-                    <div className="row mt-3">
-                        <button className='col-sm-4'>Calcular Impuesto</button>
-                        <p className='col-sm-4'>Monto $ IGTF</p>
-                        <input className='col-sm-3' type="text" />
+                    <div className="row  pb-5">
+
+                        <p className='col-sm-7'>Monto $ IGTF</p>
+                        <input className='col-sm-5' type="text" />
                     </div>
-                    <div className="row mt-3">
-                        <button className='col-sm-4 mr-3'>Recuperar % Usado</button>
-                        <button className='col-sm-4 ml-3'>Registradora 10%</button>
-                        <button className='col-sm-4'>Soberanos</button>
-                        <button className='col-sm-4 mt-3'> digitales</button>
+                    <div className="row  justify-content-between">
+                        <button className='col-sm-5 '>Registradora 10%</button>
+                        <button className='col-sm-5'>Soberanos</button>
+                        
                     </div>
+                    <div className="row mt-2 justify-content-between">
+                    <button className='col-sm-5 '> digitales</button>
+                    <button className='col-sm-5 ml-3'>Calcular Impuesto</button>
+                    </div>
+                    <div className="row mt-2  justify-content-between">
+                        
+                        <button className='col-sm-5'>Calcular base</button>
+                        <button className='col-sm-5 mr-3'>Recuperar % Usado</button>
+                    </div>
+                    
 
 
 
+                </div>
+                <div className="botones col-md-3 ">
+                    <div className="row justify-content-center ">
+                        <input type="button" className='col-sm-5 ' value="Incluir" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Consultar" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Eliminar" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Modificar" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Totales" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Cliente" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Registradora" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Mes Antes" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Referencia" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Exel" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Salir" />
+
+                    </div>
                 </div>
 
 
