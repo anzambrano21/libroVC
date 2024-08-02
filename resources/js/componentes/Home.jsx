@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Inicio,Registro } from './inicio'
 import { LibroV } from './libroV';
+import {LibroC} from './libroC';
 export default function Home(){
     return(
         
@@ -10,7 +11,7 @@ export default function Home(){
             
             <Routes>
                 
-                <Route path='/' element={<LibroV/>}/>
+                <Route path='/' element={<LibroC/>}/>
                 <Route path='/inicio' element={<Inicio/>}/>
                 <Route path='/registro/*' element={<Registro/>} />
                 

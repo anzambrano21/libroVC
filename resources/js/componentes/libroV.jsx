@@ -153,10 +153,13 @@ export const LibroV = () => {
                     <div className="row mt-3 pb-3 ">
                         <p className='row'>Tipo de Factura Polar</p>
                         <select className='col-md-6' name="" id="">
-                            <option value="Factura">Factura</option>
-                            <option value="Nota de Credito">Nota de Credito</option>
-                            <option value="Nota de Debito">Nota de Debito</option>
-                            <option value="Caja registradora">Caja registradora</option>
+                        <option value="Cervesa">Cervesa</option>
+                            <option value="Harina">Harina</option>
+                            <option value="Ketchup">Ketchup</option>
+                            <option value="P&G">P&G</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Pepsi">Pepsi</option>
+                            <option value="Detergente">Detergente</option>
                         </select>
 
                     </div>
