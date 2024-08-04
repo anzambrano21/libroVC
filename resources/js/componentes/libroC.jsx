@@ -42,8 +42,8 @@ export const LibroC = () => {
                     </tbody>
                 </table>
             </div>
-            <div className="d-flex formulario mt-4 justify-content-center">
-                <div className="Datos col-md-4">
+            <div className="d-flex formulario mt-4 ml-5 justify-content-around">
+                <div className="Datos col-md-4 ">
                     <div className=' row '>
                         <p className='col-sm-5'>N Factura</p>
                         <input className='col-sm-6' type="text" />
@@ -98,10 +98,10 @@ export const LibroC = () => {
                         <input className='col-sm-6' type="text" />
                     </div>
                 </div>
-                <div className="Datos col-md-4">
-                    <div className="row ">
-                        <p className='row'>Factura Polar</p>
-                        <select className='col-md-6' name="" id="">
+                <div className="Datos col-md-3 mr-5">
+                    <div className="row justify-content-center">
+                        <p className='row justify-content-center'>Factura Polar</p>
+                        <select className='col-md-6 ' name="" id="">
                             <option value="Cervesa">Cervesa</option>
                             <option value="Harina">Harina</option>
                             <option value="Ketchup">Ketchup</option>
@@ -111,8 +111,8 @@ export const LibroC = () => {
                             <option value="Detergente">Detergente</option>
                         </select>
                     </div>
-                    <div className="row mt-3 ">
-                        <p className='row'>Documento</p>
+                    <div className="row mt-3 justify-content-center ">
+                        <p className='row justify-content-center'>Documento</p>
                         <select className='col-md-6' name="" id="">
                             <option value="Cervesa">Factura</option>
                             <option value="Harina">Nota de Credito</option>
@@ -120,8 +120,8 @@ export const LibroC = () => {
 
                         </select>
                     </div>
-                    <div className="row mt-3  ">
-                        <p className='row'>Impuesto Nacional</p>
+                    <div className="row mt-3 justify-content-center ">
+                        <p className='row justify-content-center'>Impuesto Nacional</p>
                         <select className='col-md-6' name="" id="">
                             <option value="16">16</option>
                             <option value="8">8</option>
@@ -130,7 +130,7 @@ export const LibroC = () => {
                         </select>
                     </div>
                     <br /> <br />
-                    <div className="row mt-2 justify-content-between">
+                    <div className="row mt-2 justify-content-between ">
                         <input className='col-md-5' type="button" value="Recuperar %" />
                         <input className='col-md-5' type="button" value="Soberanos" />
                     </div>
@@ -142,51 +142,51 @@ export const LibroC = () => {
                     
                 </div>
                 <div className="botones col-md-3">
-                <div className="row justify-content-end ">
+                <div className="row justify-content-center ">
                         <input type="button" className='col-sm-5 ' value="Incluir" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Consultar" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Eliminar" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Modificar" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Totales" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Cliente" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Imprimir R" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Imprimir" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Mes Antes" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Refrescar" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Exel" />
 
                     </div>
-                    <div className="row justify-content-end mt-2">
+                    <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Salir" />
 
                     </div>

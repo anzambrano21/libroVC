@@ -4,14 +4,18 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Inicio,Registro } from './inicio'
 import { LibroV } from './libroV';
 import {LibroC} from './libroC';
+import { Cliente } from './Cliente';
+import { Activar } from './Activar';
 export default function Home(){
     return(
         
         <BrowserRouter>
             
             <Routes>
-                
-                <Route path='/' element={<LibroC/>}/>
+            <Route path='/' element={<Activar/>}/>
+                <Route path='/Cliente' element={<Cliente/>}/>
+                <Route path='/LibroV' element={<LibroV/>}/>
+                <Route path='/LibroC' element={<LibroC/>}/>
                 <Route path='/inicio' element={<Inicio/>}/>
                 <Route path='/registro/*' element={<Registro/>} />
                 
