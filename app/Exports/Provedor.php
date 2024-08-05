@@ -9,16 +9,14 @@ use  Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-class Ventas implements FromView,WithColumnWidths, WithStyles
 
+class Provedor implements FromView,WithColumnWidths, WithStyles
 {
     /**
     * @return \Illuminate\Support\Collection
-    */
-
-    public function View() :View
+    */    public function View() :View
     {
-        return view("Venta",[
+        return view("Provedor",[
             "users"=> DB::table('users')->get()
         ]);
     }

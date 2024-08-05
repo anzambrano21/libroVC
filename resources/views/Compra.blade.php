@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <title>Compras</title>
     <style>
         table {
             border-collapse: collapse;
@@ -28,15 +28,15 @@
 
         <thead>
             <tr>
-                <th colspan="11">AUTO REPUESTOS FIMOTORS, C.A.</th>
+                <th style="text-align: center;" colspan="11">AUTO REPUESTOS FIMOTORS, C.A.</th>
 
             </tr>
             <tr>
-                <th colspan="11">RIF.: J-40899124-1.</th>
+                <th style="text-align: center;" colspan="11">RIF.: J-40899124-1.</th>
 
             </tr>
             <tr>
-                <th colspan="11">Libros de Compras SEPTIEMBRE 2023</th>
+                <th style="text-align: center;" colspan="11">Libros de Compras SEPTIEMBRE 2023</th>
             </tr>
             <tr></tr>
             <tr>
@@ -58,7 +58,7 @@
         </thead>
         <tbody>
             <tr>
-                <td colspan="5">Sub Total Pag 1</td>
+                <td style="text-align: right;" colspan="5">Sub Total Pag 1</td>
                 <td></td>
                 <td style="border:  solid ;"></td>
                 <td style="border:  solid ;"></td>
@@ -68,7 +68,7 @@
 
             </tr>
             <tr>
-                <td colspan="5">TOTAL COMPRAS BS.:</td>
+                <td style="text-align: right;" colspan="5">TOTAL COMPRAS BS.:</td>
                 <td></td>
                 <td style="border:  solid ;"></td>
                 <td style="border:  solid ;"></td>

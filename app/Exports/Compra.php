@@ -9,22 +9,21 @@ use  Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-class Ventas implements FromView,WithColumnWidths, WithStyles
 
+class Compra implements FromView,WithColumnWidths, WithStyles
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-
     public function View() :View
     {
-        return view("Venta",[
+        return view("Compra",[
             "users"=> DB::table('users')->get()
         ]);
     }
 public function styles(Worksheet $sheet) {
-    $sheet->getStyle('A1:O100')->getFont()->setSize(8);
-    $sheet->getStyle('A1:O100')->getAlignment()->setWrapText(true);
+    $sheet->getStyle('A1:H100')->getFont()->setSize(8);
+    $sheet->getStyle('A1:H100')->getAlignment()->setWrapText(true);
     $sheet->getDefaultRowDimension()->setRowHeight(-1); // -1 indica ajuste automático
 
     

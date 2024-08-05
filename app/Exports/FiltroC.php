@@ -9,16 +9,15 @@ use  Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-class Ventas implements FromView,WithColumnWidths, WithStyles
 
+class FiltroC implements  FromView,WithColumnWidths, WithStyles
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-
     public function View() :View
     {
-        return view("Venta",[
+        return view("FiltroC",[
             "users"=> DB::table('users')->get()
         ]);
     }
@@ -31,7 +30,7 @@ public function styles(Worksheet $sheet) {
 }
     public function columnWidths(): array {
         return [
-            'A'=>9,
+            'A'=>20,
             'B'=>8.29,
             'C'=>10.29,
             'D'=>8.43,
