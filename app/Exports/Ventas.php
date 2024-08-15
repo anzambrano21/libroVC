@@ -19,7 +19,7 @@ class Ventas implements FromView,WithColumnWidths, WithStyles
     public function View() :View
     {
         return view("Venta",[
-            "users"=> DB::table('users')->get()
+            "Ventas"=> DB::table('libro_venta')->get()
         ]);
     }
 public function styles(Worksheet $sheet) {
@@ -42,6 +42,8 @@ public function styles(Worksheet $sheet) {
             'I'=>9,
             'J'=>4,
             'K'=>9,
+            'L'=>3,
+            'N'=>8.57
             
 
         ];

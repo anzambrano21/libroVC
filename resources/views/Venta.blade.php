@@ -61,29 +61,71 @@
             </tr>
         </thead>
         <tbody>
-            
+            @php
+                $TvmIva = 0.0;
+                $Tvng = 0.0;
+                $Tbase = 0.0;
+                $Timp = 0.0;
+                $TIvaR = 0.0;
+            @endphp
+            @foreach ($Ventas as $registro)
+                        <tr>
+                            <td style="border:  solid ;">{{$registro->fecha}}</td>
+                            <td style="border:  solid ;">{{$registro->N_Factu}}</td>
+                            <td style="border:  solid ;">{{$registro->N_Control}}</td>
+                            <td style="border:  solid ;">{{$registro->N_Rep_Z}}</td>
+                            <td style="border:  solid ;">{{$registro->N_Doc}}</td>
+                            <td style="border:  solid ;">{{$registro->Cod_Maq_Fis}}</td>
+                            <td style="border:  solid ;">{{$registro->Nom_R_Soc}}</td>
+                            <td style="border:  solid ;">{{$registro->RIF}}</td>
+                            <td style="border:  solid ;">{{$registro->Base + ($registro->Base * $registro->Porcen / 100)}}</td>
+                            <td style="border:  solid ;"></td>
+                            <td style="border:  solid ;">{{$registro->Base}}</td>
+                            <td style="border:  solid ;">{{$registro->Porcen}}</td>
+                            <td style="border:  solid ;">{{$registro->Base * $registro->Porcen / 100}}</td>
+                            <td style="border:  solid ;">{{$registro->N_Doc_Reten}}</td>
+                            @if ($registro->N_Doc_Reten)
+                                <td style="border:  solid ;">{{$registro->Base * $registro->Porcen / 100}}</td>
+                                @php
+                                $TIvaR += $registro->Base * $registro->Porcen / 100;
+                                @endphp
+                                
+                            @else
+                                <td style="border:  solid ;">{{0 * ($registro->Base * $registro->Porcen / 100)}}</td>
+                            @endif
+                            @php
+                                $TvmIva += $registro->Base + ($registro->Base * $registro->Porcen / 100);
+                                
+                                $Tbase += $registro->Base;
+                                $Timp += $registro->Base * $registro->Porcen / 100;
+                                $TIvaR += 0.0;
+                            @endphp
+
+                        </tr>
+
+            @endforeach
             <tr>
                 <td style="text-align: right;" colspan="7">Sub Total Pag 1</td>
                 <td></td>
+                <td style="border:  solid ;">{{$TvmIva}}</td>
+                <td style="border:  solid ;">{{$Tvng}}</td>
+                <td style="border:  solid ;">{{$Tbase}}</td>
                 <td style="border:  solid ;"></td>
+                <td style="border:  solid ;">{{$Timp}}</td>
                 <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
+                <td style="border:  solid ;">{{$TIvaR}}</td>
 
             </tr>
             <tr>
                 <td style="text-align: right;" colspan="7">TOTAL COMPRAS BS.:</td>
                 <td></td>
+                <td style="border:  solid ;">{{$TvmIva}}</td>
+                <td style="border:  solid ;">{{$Tvng}}</td>
+                <td style="border:  solid ;">{{$Tbase}}</td>
                 <td style="border:  solid ;"></td>
+                <td style="border:  solid ;">{{$Timp}}</td>
                 <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
-                <td style="border:  solid ;"></td>
+                <td style="border:  solid ;">{{$TIvaR}}</td>
             </tr>
             <tr></tr>
             <tr></tr>
@@ -124,7 +166,7 @@
 
         </thead>
         <tbody>
-        <tr>
+            <tr>
                 <th style="border:  solid ; text-align: right;" colspan="7">Total Bs</th>
                 <th style="border:  solid ;"></th>
                 <th style="border:  solid ;"></th>

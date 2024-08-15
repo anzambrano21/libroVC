@@ -1,8 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../css/libroV.css';
 
 export const Cliente = () => {
+    const [tipoContribuyente, setTipoContribuyente] = useState('Especial');
+    const [tipoPatente, setTipoPatente] = useState('Con Patente');
+    const [tipoRegistradora, setRegistradora] = useState('Con Caja Registradora');
+    const manejarCambioTipo = (e) => {
+        setTipoContribuyente(e.target.value);
+      };
+      const manejarPatente = (e) => {
+        setTipoPatente(e.target.value);
+      };
+      const manejarRegistradora = (e) => {
+        setRegistradora(e.target.value);
+      };
+      const registrar = async () => {
+        let user={
+            codi: document.getElementById('cod').value,
+            nom:  document.getElementById('Nom').value,
+            rep: document.getElementById('Rep').value,
+            rif: document.getElementById('Nom').value,
+
+            dire: document.getElementById('dire').value,
+            telef:  document.getElementById('telef').value,
+            num: document.getElementById('Num').value,
+            subC: document.getElementById('sucur').value,
+
+            con: tipoContribuyente,
+            paten:  tipoPatente,
+            regis: tipoRegistradora,
+            
+        }
+        console.log(user);
+        
+
+      }
     return (
         <div>
             <div className="tabla2">
@@ -36,53 +69,53 @@ export const Cliente = () => {
                 <div className='Datos col-md-3'>
                     <div className=' row '>
                         <p className='col-sm-5'>Codigo</p>
-                        <input className='col-sm-6' type="text" />
+                        <input id='cod' className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Nombre</p>
-                        <input className='col-sm-6' type="text" />
+                        <input id='Nom' className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Representante</p>
-                        <input className='col-sm-6' type="text" />
+                        <input id='Rep' className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Rif</p>
-                        <input className='col-sm-6' type="text" />
+                        <input id='rif' className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Direccion</p>
-                        <input className='col-sm-6' type="text" />
+                        <input id='dire' className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Telefono</p>
-                        <input className='col-sm-6' type="number" name="" id="" />
+                        <input id='telef' className='col-sm-6' type="number" name="" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Numero</p>
-                        <input className='col-sm-6' type="number" name="" id="" />
+                        <input className='col-sm-6' type="number" name="" id="Num" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Sucursal</p>
-                        <input className='col-sm-6' type="text" />
+                        <input className='col-sm-6' type="text" id='sucur' />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Contribuyente</p>
-                        <select className='col-sm-6' name="" id="">
+                        <select className='col-sm-6' onChange={manejarCambioTipo} name="" id="">
                             <option value="Especial">Especial</option>
                             <option value="Ordinario">Ordinario</option>
                         </select>
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Patente</p>
-                        <select className='col-sm-6' name="" id="">
+                        <select className='col-sm-6' onChange={manejarPatente} name="" id="">
                             <option value="Con Patente">Con Patente</option>
                             <option value="Sin Patente">Sin Patente</option>
                         </select>
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Registradora</p>
-                        <select className='col-sm-6' name="" id="">
+                        <select className='col-sm-6' onChange={manejarRegistradora} name="" id="">
                             <option value="Con Caja Registradora">Con Caja Registradora</option>
                             <option value="Sin Caja Registradora">Sin Caja Registradora</option>
                         </select>
@@ -94,9 +127,9 @@ export const Cliente = () => {
                     <h5 className='row justify-content-around'>Portal Seniat</h5>
                     <div className="row justify-content-around">
                         <p className='col-sm-2'>Usuario</p>
-                        <input className='col-sm-4' type="text" />
+                        <input id='sentUser' className='col-sm-4' type="text" />
                         <p className='col-sm-2'>Clave</p>
-                        <input className='col-sm-4' type="text" />
+                        <input id='sentClav' className='col-sm-4' type="text" />
                     </div>
                     <div className="row tabla">
                         <table className='table table-striped'>
@@ -135,7 +168,7 @@ export const Cliente = () => {
 
                     </div>
                     <div className="row justify-content-around">
-                        <input className='col-sm-2' type="button" value="Adicion" />
+                        <input className='col-sm-2' type="button" value="Adicion" onClick={registrar} />
                         <input className='col-sm-2' type="button" value="Eliminar" />
                         <input className='col-sm-2' type="button" value="Refrescar" />
                     </div>
