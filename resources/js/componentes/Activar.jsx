@@ -80,6 +80,52 @@ export const Activar=()=>{
                     </div>
 
                 </div>
+                <div className="botones col-md-3 ">
+                    <div className="row justify-content-center ">
+                        <input type="button" className='col-sm-5 ' value="Incluir" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Consultar" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Eliminar" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Modificar" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Totales" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Cliente" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Registradora" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Mes Antes" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Referencia" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Exel" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Salir" />
+
+                    </div>
+                </div>
 
             </div>
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 
+
 class ClienteController extends Controller
 {
     /**
@@ -12,7 +13,7 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        //
+        return Cliente::all();
     }
 
     /**
@@ -20,7 +21,22 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        Cliente::create([
+            'codi'=>$request['codi'],
+            'nombre'=>$request['nom'],
+            'representante'=>$request['rep'],
+            'rif'=>$request['rif'],
+            'direccion'=>$request['dire'],
+            'telefono'=>$request['telef'],
+            'numero'=>$request['num'],
+            'sucursal'=>$request['subC'],
+            'contribuyente'=>$request['con'],
+            'patente'=>$request['paten'],
+            'cajaregistradora'=>$request['regis'],
+
+        ]);
+        return $request;
     }
 
     /**

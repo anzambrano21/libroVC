@@ -1,41 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../css/libroV.css';
+import axios from 'axios';
+let res = await fetch('http://127.0.0.1:8000/api/cliente');
+let myData = await res.json();
+let data2 = myData;
 
 export const Cliente = () => {
     const [tipoContribuyente, setTipoContribuyente] = useState('Especial');
     const [tipoPatente, setTipoPatente] = useState('Con Patente');
     const [tipoRegistradora, setRegistradora] = useState('Con Caja Registradora');
+    let cliente = data2
     const manejarCambioTipo = (e) => {
         setTipoContribuyente(e.target.value);
-      };
-      const manejarPatente = (e) => {
+    };
+    const manejarPatente = (e) => {
         setTipoPatente(e.target.value);
-      };
-      const manejarRegistradora = (e) => {
+    };
+    const manejarRegistradora = (e) => {
         setRegistradora(e.target.value);
-      };
-      const registrar = async () => {
-        let user={
+    };
+
+
+
+    const registrar = async () => {
+        let user = {
             codi: document.getElementById('cod').value,
-            nom:  document.getElementById('Nom').value,
+            nom: document.getElementById('Nom').value,
             rep: document.getElementById('Rep').value,
-            rif: document.getElementById('Nom').value,
+            rif: document.getElementById('rif').value,
 
             dire: document.getElementById('dire').value,
-            telef:  document.getElementById('telef').value,
+            telef: document.getElementById('telef').value,
             num: document.getElementById('Num').value,
             subC: document.getElementById('sucur').value,
 
             con: tipoContribuyente,
-            paten:  tipoPatente,
+            paten: tipoPatente,
             regis: tipoRegistradora,
-            
-        }
-        console.log(user);
-        
 
-      }
+        }
+        let response = await axios.post('http://127.0.0.1:8000/api/cliente', user)
+        console.log(response);
+
+
+    }
+    function completar(index) {
+        
+        document.getElementById('cod').value=cliente[index]['codi']
+        document.getElementById('Nom').value=cliente[index]['nombre']
+        document.getElementById('Rep').value=cliente[index]['representante']
+        document.getElementById('rif').value=cliente[index]['rif']
+
+        document.getElementById('dire').value=cliente[index]['direccion']
+        document.getElementById('telef').value=cliente[index]['telefono']
+        document.getElementById('Num').value=cliente[index]['numero']
+        document.getElementById('sucur').value=cliente[index]['sucursal']
+        document.getElementById('paten').value=cliente[index]['patente']
+        document.getElementById('regis').value=cliente[index]['cajaregistradora']
+        document.getElementById('contri').value=cliente[index]['contribuyente']
+
+
+
+    }
     return (
         <div>
             <div className="tabla2">
@@ -50,18 +77,30 @@ export const Cliente = () => {
                             <th className="col">Cod Cpc</th>
                             <th className="col">Contribuyente</th>
                             <th className="col">Patente</th>
-                            <th className="col">No Patente</th>
+
                             <th className="col">Clave Patente</th>
                             <th className="col">Clasificacion</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
+                        {cliente.map((item, index) => (
+
+                            <tr key={index + 1} onClick={() => completar(index)}>
+
+                                <td >{index + 1}</td>
+                                <td >{item.codi}</td>
+                                <td>{item.nombre}</td>
+                                <td>{item.rif}</td>
+                                <td>{item.numero}</td>
+                                <td>{item.codcpc}</td>
+                                <td>{item.contribuyente}</td>
+                                <td>{item.patente}</td>
+                                <td>{item.patenteclave}</td>
+                                <td>pendiente</td>
+                            </tr>
+                        ))}
+
+
                     </tbody>
                 </table>
             </div>
@@ -101,21 +140,21 @@ export const Cliente = () => {
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Contribuyente</p>
-                        <select className='col-sm-6' onChange={manejarCambioTipo} name="" id="">
+                        <select className='col-sm-6' onChange={manejarCambioTipo} name="" id="contri">
                             <option value="Especial">Especial</option>
                             <option value="Ordinario">Ordinario</option>
                         </select>
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Patente</p>
-                        <select className='col-sm-6' onChange={manejarPatente} name="" id="">
+                        <select className='col-sm-6' onChange={manejarPatente} name="" id="paten">
                             <option value="Con Patente">Con Patente</option>
                             <option value="Sin Patente">Sin Patente</option>
                         </select>
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Registradora</p>
-                        <select className='col-sm-6' onChange={manejarRegistradora} name="" id="">
+                        <select className='col-sm-6' onChange={manejarRegistradora} name="" id="regis">
                             <option value="Con Caja Registradora">Con Caja Registradora</option>
                             <option value="Sin Caja Registradora">Sin Caja Registradora</option>
                         </select>
@@ -143,18 +182,28 @@ export const Cliente = () => {
                                     <th className="col">Cod Cpc</th>
                                     <th className="col">Contribuyente</th>
                                     <th className="col">Patente</th>
-                                    <th className="col">No Patente</th>
+                                    
                                     <th className="col">Clave Patente</th>
                                     <th className="col">Clasificacion</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
+                                {cliente.map((item, index) => (
+
+                                    <tr key={index + 1}>
+
+                                        <td >{index + 1}</td>
+                                        <td >{item.codi}</td>
+                                        <td>{item.nombre}</td>
+                                        <td>{item.rif}</td>
+                                        <td>{item.numero}</td>
+                                        <td>{item.codcpc}</td>
+                                        <td>{item.contribuyente}</td>
+                                        <td>{item.patente}</td>
+                                        <td>{item.patenteclave}</td>
+                                        <td>pendiente</td>
+                                    </tr>
+                                ))}
                             </tbody>
 
                         </table>
@@ -183,12 +232,12 @@ export const Cliente = () => {
                         <input type="button" value="Consulta" className="col-md-5" />
                         <input type="button" value="Eliminar" className="col-md-5" />
                     </div>
-                    
+
                     <div className="row justify-content-around mb-3">
                         <input type="button" value="Actualizar" className="col-md-5" />
                         <input type="button" value="Limpiar" className="col-md-5" />
                     </div>
-                    
+
                     <div className="row justify-content-around mb-3">
                         <input type="button" value="Refrescar" className="col-md-5" />
                         <input type="button" value="Rastro" className="col-md-5" />
