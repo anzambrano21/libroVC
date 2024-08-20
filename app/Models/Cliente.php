@@ -21,6 +21,7 @@ class Cliente extends Model
     'cajaregistradora',
     'distribuidora',
     'dircompro',
+    'cliente',
     ];
     protected $table = 'clientes';
     use HasFactory;

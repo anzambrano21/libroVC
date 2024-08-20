@@ -11,3 +11,4 @@ Route::get('/user', function (Request $request) {
 Route::apiResource("cliente",ClienteController::class);
 Route::apiResource("LibVenta",LibVentasController::class);
 Route::apiResource("LibCompra",LibCompraController::class);
+Route::match(['get', 'post'], '/buscar',[ClienteController::class,'buscar']);

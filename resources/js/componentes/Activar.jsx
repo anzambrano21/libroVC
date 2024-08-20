@@ -1,20 +1,68 @@
-import React , { useState } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../css/libroV.css';
+import axios from 'axios';
+import { Exaplecontect } from "../context/contexto"
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Importa los estilos
+import dayjs from "dayjs"; // ES 2015
 const events = [
     {
-      title: 'Evento importante',
-      start: new Date(2024, 7, 10),
-      end: new Date(2024, 7, 12),
+        title: 'Evento importante',
+        start: new Date(2024, 7, 10),
+        end: new Date(2024, 7, 12),
     },]
-export const Activar=()=>{
-    const [date, setDate] = useState(new Date());
-    return(
+export const Activar = () => {
+    const example = useContext(Exaplecontect)
+    console.log(example);
+    
+    const [datos, setdatos] = useState([]);
+    const [date, setDate] = useState(null);
+    const [cliente, setcliente] = useState(null);
+    const formatDate = (date) => {
+        return dayjs(date).format("DD/MM/YYYY");
+      };
+    const buscar = async (band) => {
+        let cliente = {
+            codigo: document.getElementById('codi').value,
+            numero: document.getElementById('numero').value,
+            rif: document.getElementById('rif').value,
+            cliente: document.getElementById('cliente').value,
+            contri: document.getElementById('contri').value,
+            ban:band
+        }
+        const response = await axios.post('http://127.0.0.1:8000/api/buscar', cliente)
+        setdatos(response.data) 
+        console.log(response);
+
+
+    }
+    const Activar= ()=>{
+        if (cliente!=null && date!=null) {
+            let activado={
+                fech1:formatDate(date[0]),
+                fech2:formatDate(date[1]),
+                codi:cliente.codi
+            } 
+            example.setDatos(activado)
+            
+        }else{
+            alert("Necesita un Cliente y Fechas para Activar")
+            
+            
+        }
+        
+    }
+    function completar(index) {
+        console.log(cliente);
+        
+        setcliente(datos[index])
+
+    }
+    return (
         <div>
             <div className="tabla2">
-            <table className='table table-striped'>
+                <table className='table table-striped'>
                     <thead>
                         <tr>
                             <th className="col">No</th>
@@ -26,42 +74,51 @@ export const Activar=()=>{
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
+                        {datos.map((item, index) => (
+                            <tr onClick={()=>completar(index)} key={index}>
+                                <th scope="row">{index}</th>
+                                <td>{item.codi }</td>
+                                <td>{item.cliente}</td>
+                                <td>{item.rif}</td>
+                                <td>{item.telefono}</td>
+                                <td>{item.contribuyente}</td>
+                            </tr>
+                        ))}
+
                     </tbody>
-            </table>
+                </table>
             </div>
             <div className='d-flex formulario mt-4 justify-content-around'>
                 <div className=" datos col-md-3">
                     <div className="row">
                         <p className='col-sm-5'>Codigo</p>
-                        <input type="text" className="col-sm-6" />
+                        <input type="text" className="col-sm-6" id='codi' />
                     </div>
                     <div className="row">
-                    <p className='col-sm-5'>Numero</p>
-                    <input type="text" className="col-sm-6" />
+                        <p className='col-sm-5'>Numero</p>
+                        <input type="number" id='numero' className="col-sm-6" />
                     </div>
                     <div className="row">
-                    <p className='col-sm-5'>RIF</p>
-                    <input type="text" className="col-sm-6" />
+                        <p className='col-sm-5'>RIF</p>
+                        <input type="number" id='rif' className="col-sm-6" />
                     </div>
                     <div className="row">
-                    <p className='col-sm-5'>Cliente</p>
-                    <input type="text" className="col-sm-6" />
+                        <p className='col-sm-5'>Cliente</p>
+                        <input type="text" id='cliente' className="col-sm-6" />
                     </div>
                     <div className="row">
-                    <p className='col-sm-5'>Contribuyente</p>
-                    <input type="text" className="col-sm-6" />
+                        <p className='col-sm-5'>Contribuyente</p>
+                        <select className='col-6 align-self-start' name="" id="contri">
+                            <option value="vacio"></option>
+                            <option value="Ordinario">Ordinadio</option>
+                            <option value="Especial">Especial</option>
+                        </select>
                     </div>
 
                 </div>
                 <div className='datos2 col-md-4 '>
                     <div className="row  justify-content-around">
-                        <Calendar onChange={setDate} value={date}/>
+                        <Calendar selectRange={true} onChange={setDate}  />
                     </div>
                     <h5 className='row  justify-content-around'>Fecha de Reporte</h5>
                     <div className="row">
@@ -76,53 +133,37 @@ export const Activar=()=>{
                     </div>
                     <div className="row justify-content-around">
                         <input className="col-sm-5" type="button" value="Semanal" />
-                        <input className="col-sm-5" type="button" value="Otras Fechas" />
+                        
                     </div>
 
                 </div>
                 <div className="botones col-md-3 ">
                     <div className="row justify-content-center ">
-                        <input type="button" className='col-sm-5 ' value="Incluir" />
+                        <input type="button" className='col-sm-5' onClick={Activar}  value="Activar" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Consultar" />
+                        <input type="button" onClick={()=> buscar(false)} className='col-sm-5' value="Rastro" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Eliminar" />
+                        <input type="button" className='col-sm-5' onClick={()=> buscar(true)} value="Sucursales" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Modificar" />
+                        <input type="button" className='col-sm-5' value="Imprimir-Ventas" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Imprimir-Compras" />
+
+                    </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="Status" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-5' value="Totales" />
-
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Cliente" />
-
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Registradora" />
-
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Mes Antes" />
-
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Referencia" />
-
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Exel" />
-
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Salir" />
 
                     </div>
                 </div>

@@ -16,6 +16,29 @@ class ClienteController extends Controller
         return Cliente::all();
     }
 
+    public function buscar(Request $request) {
+        $busqueda=null;
+        if ($request->ban) {
+            $busqueda= Cliente::where('codi', $request->codigo)
+            ->whereNotNull('sucursal')
+            ->orWhere('telefono', $request->numero)
+            ->orWhere('rif', $request->rif)
+            ->orWhere('cliente', $request->cliente)
+            ->orWhere('contribuyente', $request->contri)
+            ->get();
+        }else{
+            $busqueda= Cliente::where('codi', $request->codigo)
+            ->whereNull('sucursal')
+            ->orWhere('telefono', $request->numero)
+            ->orWhere('rif', $request->rif)
+            ->orWhere('cliente', $request->cliente)
+            ->orWhere('contribuyente', $request->contri)
+            ->get();
+        }
+
+        return $busqueda;
+    }
+
     /**
      * Store a newly created resource in storage.
      */

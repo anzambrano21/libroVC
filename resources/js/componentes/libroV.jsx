@@ -123,7 +123,7 @@ export const LibroV = () => {
                     </thead>
                     <tbody>
                     {data2.map((item, index) => (
-                        <tr>
+                        <tr key={index}>
                             <td>{index}</td>
                             <td>{item.hasta}</td>
                             <td>{item.control}</td>
