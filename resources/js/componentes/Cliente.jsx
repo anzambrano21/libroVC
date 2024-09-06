@@ -7,10 +7,14 @@ let myData = await res.json();
 let data2 = myData;
 
 export const Cliente = () => {
+    useEffect(() => {
+        document.title = 'Registro de Cliente';
+      }, []); 
     const [tipoContribuyente, setTipoContribuyente] = useState('Especial');
     const [tipoPatente, setTipoPatente] = useState('Con Patente');
     const [tipoRegistradora, setRegistradora] = useState('Con Caja Registradora');
     let cliente = data2
+
     const manejarCambioTipo = (e) => {
         setTipoContribuyente(e.target.value);
     };

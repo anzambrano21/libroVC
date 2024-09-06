@@ -1,0 +1,24 @@
+
+.containerR {
+    max-width: 400px;
+    margin: auto;
+}
+label {
+    display: block;
+    margin-top: 10px;
+}
+.inputR, .selectR {
+    width: 100%;
+    margin-top: 3px;
+}
+.buttonR {
+    margin-top: 20px;
+    padding:5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #45a049;
+}

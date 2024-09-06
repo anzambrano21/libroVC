@@ -48,9 +48,10 @@ class LibVentasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(libVentas $libVentas)
+    public function show( $libVentas)
     {
-        //
+        
+        return libVentas::where("cliente",$libVentas)->get();
     }
 
     /**

@@ -21,17 +21,19 @@ class LibCompraController extends Controller
     public function store(Request $request)
     {
         libCompra::create([
-            'cliente'=>$request['cli'],
+            'provedor'=>$request['cli'],
             'numfactur'=>$request['Nf'],
             'fechafactur'=>$request['Ff'],
+            'fecharegistro'=>$request['Fr'],
             'rif'=>$request['rif'],
             'controlFac'=>$request['codF'],
             'docafectado'=>$request['docA'],
             'exentas'=>$request['Ex'],
-            'baseimportacion'=>$request['Bi'],
-            'impuimportacion'=>$request['isvi'],
-            'basenacional'=>$request['Bn'],
-            'ISVnacional'=>$request['isvN'],
+            'basegeneral'=>$request['Bi'],
+            'MontoIva'=>$request['isvi'],
+            'facPolar'=>$request['Fp'],
+            'documento'=>$request['Doc'],
+            'pornacional'=>$request['ImN'],
         ]);
         return $request;
     }
@@ -39,9 +41,9 @@ class LibCompraController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(libCompra $libCompra)
+    public function show( $libCompra)
     {
-        //
+        return libCompra::where("provedor",$libCompra)->get();
     }
 
     /**
@@ -55,8 +57,8 @@ class LibCompraController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(libCompra $libCompra)
+    public function destroy( $libCompra)
     {
-        //
+        libCompra::findOrFail( $libCompra)->delete();
     }
 }

@@ -1,10 +1,36 @@
-import React from 'react';
+import React,{ useState, useEffect, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import axios from 'axios';
 import '../../css/libroV.css';
-let res = await fetch('http://127.0.0.1:8000/api/LibVenta');
-let myData = await res.json();
-let data2 = myData;
+import { Exaplecontect } from "../context/contexto"
+
+
 export const LibroV = () => {
+    const example = useContext(Exaplecontect)
+    const [data2, setdatos] = useState([]);
+    
+    
+    const consulta= async ()=>{
+        try {
+            console.log(example.datos.codi);
+            let reponse = await axios.get(`http://127.0.0.1:8000/api/LibVenta/${example.datos.codi}`)
+            console.log(reponse);
+            setdatos(reponse.data)
+            
+            
+        } catch (error) {
+            
+        }
+
+    }
+
+
+
+    useEffect(() => {
+        document.title = 'Libro de Venta';
+        consulta();
+
+      }, []); 
     let ivae=0;
     const registrar = async () => {
         let user = {
@@ -165,7 +191,7 @@ export const LibroV = () => {
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>control</p>
-                        <input onKeyPress={handleKeyDown} id='Con'  className='col-sm-6' type="text" />
+                        <input onKeyPress={handleKeyDown} id='Con' defaultValue={example.datos.codi}  className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Doc Afectado</p>

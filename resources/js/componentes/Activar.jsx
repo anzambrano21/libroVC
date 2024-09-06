@@ -6,6 +6,12 @@ import { Exaplecontect } from "../context/contexto"
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Importa los estilos
 import dayjs from "dayjs"; // ES 2015
+
+let res = await fetch('http://127.0.0.1:8000/api/cliente');
+let myData = await res.json();
+let data2 = myData;
+
+
 const events = [
     {
         title: 'Evento importante',
@@ -13,12 +19,16 @@ const events = [
         end: new Date(2024, 7, 12),
     },]
 export const Activar = () => {
+    useEffect(() => {
+        document.title = 'Activcion de Cliente';
+      }, []); 
     const example = useContext(Exaplecontect)
     console.log(example);
     
-    const [datos, setdatos] = useState([]);
+    const [datos, setdatos] = useState(data2);
     const [date, setDate] = useState(null);
     const [cliente, setcliente] = useState(null);
+    
     const formatDate = (date) => {
         return dayjs(date).format("DD/MM/YYYY");
       };
@@ -57,7 +67,12 @@ export const Activar = () => {
         console.log(cliente);
         
         setcliente(datos[index])
-
+        document.getElementById("codi").value=datos[index].codi
+        document.getElementById("numero").value=datos[index].numero
+        document.getElementById("numero").value=datos[index].numero
+        document.getElementById("rif").value=datos[index].rif
+        document.getElementById("cliente").value=datos[index].nombre
+        document.getElementById("contri").value=datos[index].contribuyente
     }
     return (
         <div>
@@ -78,7 +93,7 @@ export const Activar = () => {
                             <tr onClick={()=>completar(index)} key={index}>
                                 <th scope="row">{index}</th>
                                 <td>{item.codi }</td>
-                                <td>{item.cliente}</td>
+                                <td>{item.nombre}</td>
                                 <td>{item.rif}</td>
                                 <td>{item.telefono}</td>
                                 <td>{item.contribuyente}</td>

@@ -12,7 +12,8 @@ export const Inicio = () => {
       }, []); 
 
     const example = useContext(Exaplecontect)
-
+    console.log(example);
+    
 
     const iniciar = async () => {
         let user = document.getElementById("loginName").value;
@@ -22,11 +23,12 @@ export const Inicio = () => {
             password: pasw
         }
         example.setDatos(usur);
-        let response = await axios.post('https://redes/api/log', usur)
-        example.setDatos(response.data)
+        let response = await axios.post('http://127.0.0.1:8000/api/login', usur)
+
         if (response.data.home === 'Login successful') {
+            example.setDatos(response.data)
             // Redirige al usuario a la página deseada
-            window.location.href = '/admin';
+            window.location.href = '/';
         } else {
             alert("inicio de secion fallida");
         }
@@ -48,7 +50,7 @@ export const Inicio = () => {
                         
                             <div data-mdb-input-init className="form-outline mb-4">
                                 <input type="email" id="loginName" className="form-control" />
-                                <label className="form-label" htmlFor="loginName">Correo</label>
+                                <label className="form-label" htmlFor="loginName">Usuario</label>
                             </div>
 
 

@@ -1,25 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../css/libroV.css';
 import axios from 'axios';
-let res = await fetch('http://127.0.0.1:8000/api/LibCompra');
-let myData = await res.json();
-let data2 = myData;
+import { Exaplecontect } from "../context/contexto"
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 export const LibroC = () => {
-    const [FacturaPolar, setFacturaPolar] = useState('Especial');
-    const [Documento, setDocumento] = useState('Con Patente');
-    const [inpuestoNacional, setRegistradora] = useState('Con Caja Registradora');
 
-    const manejarFacturaPolar = (e) => {
-        setFacturaPolar(e.target.value);
-    };
-    const manejarDocumento = (e) => {
-        setDocumento(e.target.value);
-    };
-    const manejarinpuestoNacional = (e) => {
-        setRegistradora(e.target.value);
-    };
+    const [data2, setdatos] = useState([]);
+
+    const example = useContext(Exaplecontect)
+    const consulta = async () => {
+        try {
+            console.log(example.datos.codi);
+            let reponse = await axios.get(`http://127.0.0.1:8000/api/LibCompra/${example.datos.codi}`)
+            console.log(reponse);
+            setdatos(reponse.data)
+
+
+        } catch (error) {
+            console.log(error);
+
+        }
+
+    }
+    useEffect(() => {
+        document.title = 'Libro de Compra';
+        consulta()
+    }, []);
     const registrar = async () => {
         let user = {
             Nf: document.getElementById('Nf').value,
@@ -31,13 +39,11 @@ export const LibroC = () => {
             cli: document.getElementById('cli').value,
             monisv: document.getElementById('monisv').value,
             Ex: document.getElementById('Ex').value,
-            Bi: document.getElementById('Bi').value,
-            isvi: document.getElementById('isvi').value,
-            Bn: document.getElementById('Bn').value,
-            isvN: document.getElementById('isvN').value
-            //document.getElementById('Fp'),
-            //document.getElementById('Doc'),
-            //document.getElementById('In'),
+            Bi: document.getElementById('Bg').value,
+            isvi: document.getElementById('Miva').value,
+            Fp: document.getElementById('Fp').value,
+            Doc: document.getElementById('Doc').value,
+            ImN: document.getElementById('In').value,
         }
 
 
@@ -53,7 +59,7 @@ export const LibroC = () => {
 
 
     }
-    let indice = 0
+    let indice=null
 
     const handleKeyDown = (e) => {
         let inputs = [document.getElementById('Nf'),
@@ -65,13 +71,9 @@ export const LibroC = () => {
         document.getElementById('cli'),
         document.getElementById('monisv'),
         document.getElementById('Ex'),
-        document.getElementById('Bi'),
-        document.getElementById('isvi'),
-        document.getElementById('Bn'),
-        document.getElementById('isvN')
-            //document.getElementById('Fp'),
-            //document.getElementById('Doc'),
-            //document.getElementById('In'),
+        document.getElementById('Bg'),
+        document.getElementById('Miva')
+
         ]
         if (e.key === 'Enter') {
             // Cambiar el foco al siguiente campo de entrada
@@ -87,20 +89,76 @@ export const LibroC = () => {
         }
     }
     function completar(index) {
-        alert('hola')
+            indice=data2[index].id
+            document.getElementById('Nf').value=data2[index].numfactur
+            document.getElementById('codF').value=data2[index].controlFac
+            document.getElementById('docA').value=data2[index].docafectado
+            document.getElementById('Fr').value=data2[index].fecharegistro
+            document.getElementById('Ff').value=data2[index].fechafactur
+            document.getElementById('rif').value=data2[index].rif
+            document.getElementById('cli').value=data2[index].provedor
+            document.getElementById('monisv').value=data2[index].montoimputotal
+            document.getElementById('Ex').value=data2[index].exentas
+            document.getElementById('Bg').value=data2[index].basegeneral
+            document.getElementById('Miva').value=data2[index].MontoIva
+            document.getElementById('Fp').value=data2[index].facPolar
+            document.getElementById('Doc').value=data2[index].documento
+            document.getElementById('In').value=data2[index].pornacional
+            alert('hola')
 
 
 
     }
+    const Eliminar= async()=>{
+        axios.delete(`http://127.0.0.1:8000/api/LibCompra/${indice}`)
+        
+        
+    }
+    const imprimir= async()=>{
+        
+        let datos={
+            cidi:example.datos.codi,
+            fecha1:example.datos.fech1,
+            fecha2:example.datos.fech2
+        }
+        console.log(datos);
+        const queryString = new URLSearchParams(datos).toString();
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/export?${queryString}`, {
+                responseType: 'blob', // Importante para manejar archivos binarios
+            });
+            
+            
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'prueva.xlsx'); // Nombre del archivo
+            document.body.appendChild(link);
+            link.click();
+        } catch (error) {
+            console.error('Error descargando el archivo:', error);
+        }
+        
+         
+    }
 
+    function  BaseGeneral() {
+        let baseG = document.getElementById('Bg').value
+        document.getElementById('monisv').value = baseG * (parseInt(document.getElementById('In').value) + 100) / 100
+        document.getElementById('Miva').value = baseG * parseInt(document.getElementById('In').value) / 100
+
+
+
+
+    }
+    const today = new Date().toISOString().split('T')[0];
     return (
-        <div>
+        <div className='col'>
             <div className="tabla">
                 <table className='table table-striped'>
                     <thead>
                         <tr>
                             <th className="col">No</th>
-                            <th className="col">Registro</th>
                             <th className="col">Doc Afectado</th>
                             <th className="col">Fecha</th>
                             <th className="col">Fecha Factura</th>
@@ -108,18 +166,19 @@ export const LibroC = () => {
                             <th className="col">Provedor</th>
                             <th className="col">Monto Incluye IVA</th>
                             <th className="col">Exenta</th>
-                            <th className="col">Base Inportacion</th>
-                            <th>IVA Inportacion</th>
-                            <th>Base Nacional</th>
-                            <th>IVA Nacional</th>
+                            <th className="col">Base general</th>
+
+                            <th>Monto Iva</th>
+                            <th>Factura Polar</th>
+                            <th>Documento</th>
+                            <th>Impuesto Nacional</th>
                             <th>Usuario</th>
-                            <th>Porc Import</th>
                             <th>Porc Nacional</th>
                             <th>Retencion</th>
                             <th>Comprobante</th>
                             <th>Fecha Comprobante</th>
                             <th>Factura Polar</th>
-                            <th>Fecha Registro</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -127,19 +186,21 @@ export const LibroC = () => {
                             <tr key={index + 1} onClick={() => completar(index)}>
 
                                 <td >{index + 1}</td>
-                                <td>{item.id}</td>
+
                                 <td >{item.docafectado}</td>
-                                <td>{item.created_at}</td>
+                                <td>{item.fecharegistro}</td>
                                 <td>{item.fechafactur}</td>
                                 <td>{item.rif}</td>
-                                <td></td>
-                                <td></td>
+                                <td>{item.provedor}</td>
+                                <td>{item.MontoIva}</td>
                                 <td>{item.exentas}</td>
-                                <td>{item.baseimportacion}</td>
-                                <td></td>
-                                <td>{item.basenacional}</td>
+                                <td>{item.basegeneral}</td>
 
-                                <td>pendiente</td>
+                                <td>{item.MontoIva}</td>
+                                <td>{item.facPolar}</td>
+
+                                <td>{item.documento}</td>
+                                <td>{item.pornacional}</td>
                             </tr>
                         ))}
 
@@ -158,22 +219,22 @@ export const LibroC = () => {
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Doc Afectado</p>
-                        <input onKeyPress={handleKeyDown} id='docA' className='col-sm-6' type="text" />
+                        <input onKeyPress={handleKeyDown} id='docA' defaultValue={new Date().toLocaleDateString('es-VE') + '/ Nombre de usuario/nombre Cliente'} className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Fecha de Registro</p>
-                        <input onKeyPress={handleKeyDown} id='Fr' className='col-sm-6' type="date" />
+                        <input onKeyPress={handleKeyDown} defaultValue={today} id='Fr' className='col-sm-6' type="date" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Fecha de Factura</p>
-                        <input onKeyPress={handleKeyDown} id='Ff' className='col-sm-6' type="date" />
+                        <input onKeyPress={handleKeyDown} defaultValue={new Date().toISOString().split('T')[0]} id='Ff' className='col-sm-6' type="date" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>RIF</p>
                         <input onKeyPress={handleKeyDown} id='rif' className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
-                        <p className='col-sm-5'>Cliente</p>
+                        <p className='col-sm-5'>Provedor</p>
                         <input onKeyPress={handleKeyDown} id='cli' className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
@@ -184,28 +245,20 @@ export const LibroC = () => {
                         <p className='col-sm-5'>Exentas</p>
                         <input onKeyPress={handleKeyDown} id='Ex' className='col-sm-6' type="text" />
                     </div>
-                    <div className=' row '>
-                        <p className='col-sm-5'>Base Inportacion</p>
-                        <input onKeyPress={handleKeyDown} id='Bi' className='col-sm-6' type="text" />
+                    <div className="row">
+                        <p className='col-sm-5'>Base General</p>
+                        <input onKeyPress={handleKeyDown} onChange={BaseGeneral} id='Bg' className='col-sm-6' type="number" />
+                    </div>
+                    <div className="row">
+                        <p className='col-sm-5'>Monto Iva</p>
+                        <input onKeyPress={handleKeyDown} onChange={BaseGeneral} id='Miva' className='col-sm-6' type="number" />
+                    </div>
 
-                    </div>
-                    <div className=' row '>
-                        <p className='col-sm-5'>ISV Inportacion</p>
-                        <input onKeyPress={handleKeyDown} id='isvi' className='col-sm-6' type="text" />
-                    </div>
-                    <div className=' row '>
-                        <p className='col-sm-5'>Base Nacional</p>
-                        <input onKeyPress={handleKeyDown} id='Bn' className='col-sm-6' type="text" />
-                    </div>
-                    <div className=' row '>
-                        <p className='col-sm-5'>ISV NAcional</p>
-                        <input onKeyPress={handleKeyDown} id='isvN' className='col-sm-6' type="text" />
-                    </div>
                 </div>
                 <div className="Datos col-md-3 mr-5">
                     <div className="row justify-content-center">
                         <p className='row justify-content-center'>Factura Polar</p>
-                        <select onChange={manejarFacturaPolar} className='col-md-6 ' name="" id="Fp">
+                        <select className='col-md-6 ' name="" id="Fp">
                             <option value="Cervesa">Cervesa</option>
                             <option value="Harina">Harina</option>
                             <option value="Ketchup">Ketchup</option>
@@ -217,27 +270,24 @@ export const LibroC = () => {
                     </div>
                     <div className="row mt-3 justify-content-center ">
                         <p className='row justify-content-center'>Documento</p>
-                        <select onChange={manejarDocumento} className='col-md-6' name="" id="Doc">
-                            <option value="Cervesa">Factura</option>
-                            <option value="Harina">Nota de Credito</option>
-                            <option value="Ketchup">Nota de Devito</option>
+                        <select className='col-md-6' name="" id="Doc">
+                            <option value="Factura">Factura</option>
+                            <option value="Nota de Credito">Nota de Credito</option>
+                            <option value="Nota de Devito">Nota de Devito</option>
 
                         </select>
                     </div>
                     <div className="row mt-3 justify-content-center ">
                         <p className='row justify-content-center'>Impuesto Nacional</p>
-                        <select onChange={manejarinpuestoNacional} className='col-md-6' name="" id="In">
+                        <select onChange={BaseGeneral} className='col-md-6' name="" id="In">
                             <option value="16">16</option>
                             <option value="8">8</option>
                             <option value="31">31</option>
-                            <option value="0">12</option>
+                            <option value="12">12</option>
                         </select>
                     </div>
                     <br /> <br />
-                    <div className="row mt-2 justify-content-between ">
-                        <input className='col-md-5' type="button" value="Recuperar %" />
-                        <input className='col-md-5' type="button" value="Soberanos" />
-                    </div>
+
 
                     <div className="row mt-2  justify-content-between">
                         <input className='col-md-5' type="button" value="Digitales" />
@@ -247,53 +297,38 @@ export const LibroC = () => {
                 </div>
                 <div className="botones col-md-3">
                     <div className="row justify-content-center ">
-                        <input type="button" className='col-sm-5 ' value="Incluir" />
+                        <input onClick={registrar} type="button" className='col-sm-6 ' value="Incluir" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Consultar" />
+                        <input type="button" className='col-sm-6' value="Consultar" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Eliminar" />
+                        <input type="button" onClick={Eliminar} className='col-sm-6' value="Eliminar" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Modificar" />
+                        <input type="button" className='col-sm-6' value="Modificar" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Totales" />
+                        <input type="button" className='col-sm-6' value="Totales" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Cliente" />
+                        <input type="button" className='col-sm-6' value="Cambiar Provedor" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Imprimir R" />
+                        <input type="button" className='col-sm-6' onClick={imprimir} value="Libro C" />
 
                     </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Imprimir" />
 
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Mes Antes" />
 
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Refrescar" />
 
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Exel" />
 
-                    </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Salir" />
 
-                    </div>
                 </div>
 
             </div>

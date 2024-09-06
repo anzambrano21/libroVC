@@ -12,13 +12,22 @@ use \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class Compra implements FromView,WithColumnWidths, WithStyles
 {
+    private $codigo,$fecha,$fecha2;
+    public function __construct($dato1,$dato2,$dato3) {
+        $this->codigo=$dato1;
+        $this->fecha=$dato2;
+        $this->fecha2=$dato3;
+    }
     /**
     * @return \Illuminate\Support\Collection
     */
     public function View() :View
     {
+        
         return view("Compra",[
-            "users"=> DB::table('users')->get()
+            "codigo" => $this->codigo,
+            "fecha" => $this->fecha,
+            "fecha2" => $this->fecha2,
         ]);
     }
 public function styles(Worksheet $sheet) {

@@ -15,6 +15,18 @@ class ClienteController extends Controller
     {
         return Cliente::all();
     }
+    private function generar_id($n) {
+        $letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $resultado = "";
+    
+        while ($n > 0) {
+            $n--;
+            $resultado = $letras[$n % 26] . $resultado;
+            $n = (int)($n / 26);
+        }
+    
+        return $resultado;
+    }
 
     public function buscar(Request $request) {
         $busqueda=null;
@@ -44,9 +56,9 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $id= Cliente::count();
         Cliente::create([
-            'codi'=>$request['codi'],
+            'codi'=>$id ? $this->generar_id($id+1) : $this->generar_id(1),
             'nombre'=>$request['nom'],
             'representante'=>$request['rep'],
             'rif'=>$request['rif'],
@@ -59,15 +71,17 @@ class ClienteController extends Controller
             'cajaregistradora'=>$request['regis'],
 
         ]);
-        return $request;
+        return $id;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Cliente $cliente)
+    public function show( $cliente)
     {
-        //
+        return $cliente;
+
+
     }
 
     /**

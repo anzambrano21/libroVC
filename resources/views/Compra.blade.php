@@ -36,9 +36,9 @@
 
             </tr>
             <tr>
-                <th style="text-align: center;" colspan="11">Libros de Compras SEPTIEMBRE 2023</th>
+                <th style="text-align: center;" colspan="11">{{$fecha}}</th>
             </tr>
-            <tr></tr>
+            <tr>{{$fecha}}</tr>
             <tr>
                 <th style="border:  solid ;" rowspan="2">Fecha</th>
                 <th style="border:  solid ;" rowspan="2">N Factura</th>
