@@ -9,6 +9,8 @@ import { Cliente } from './Cliente';
 import { Activar } from './Activar';
 import { Registro } from './usuario.jsx';
 import { Menu } from './menu.jsx';
+import { IGTF } from "./IGTF.jsx";
+import { Hoja7 } from "./hoja7.jsx";
 import ExamplecontexProvier, { Exaplecontect } from "../context/contexto"
 export default function Home() {
     const currentURL = window.location.href;
@@ -34,7 +36,7 @@ export default function Home() {
                             <div className='dashboard-nav-dropdown'><a href="#!"
                                 className={(url=="Retenciones" )? "dashboard-nav-item active dashboard-nav-dropdown-toggle":"dashboard-nav-item dashboard-nav-dropdown-toggle"}>Retenciones</a>
                             </div>
-                            <a href="#" className="dashboard-nav-item"><i className="fas fa-cogs"></i>Hoja 7 </a><a href="#"
+                            <a href="Hoja7" className="dashboard-nav-item"><i className="fas fa-cogs"></i>Hoja 7 </a><a href="IGTF"
                                 className="dashboard-nav-item"><i className="fas fa-user"></i> IGTF </a>
                             <div className="nav-item-divider"></div>
                             <a href="#" className="dashboard-nav-item"><i className="fas fa-sign-out-alt"></i> Logout </a>
@@ -54,7 +56,8 @@ export default function Home() {
                         <Route path='/LibroC' element={<LibroC />} />
                         <Route path='/inicio' element={<Inicio />} />
                         <Route path='/registro/*' element={<Registro />} />
-
+                        <Route path='/IGTF' element={<IGTF/>}/>
+                        <Route path='/Hoja7' element={<Hoja7/>}/>
 
 
                     </Routes>
