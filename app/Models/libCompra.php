@@ -31,6 +31,7 @@ class libCompra extends Model
     'documento',
     'ISVnacional',
     'docafectado',
+    
     ];
     protected $table = 'lib_compras';
     use HasFactory;

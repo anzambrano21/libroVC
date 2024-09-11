@@ -12,22 +12,34 @@ use App\Exports\FiltroC;
 use App\Exports\Provedor;
 class UseExport implements WithMultipleSheets
 {
-    private $codigo,$fecha,$fecha2;
-    public function __construct($dato1,$dato2,$dato3) {
+    private $codigo,$fecha,$fecha2,$hoja;
+    public function __construct($dato1,$dato2,$dato3,$hoja) {
         $this->codigo=$dato1;
         $this->fecha=$dato2;
         $this->fecha2=$dato3;
+        $this->hoja=$hoja;
     }
     /**
     * @return \Illuminate\Support\Collection
     */
     public function sheets(): array
     {
-        return [
+        if($this->hoja=="Compra") {
+            return [
             
-            'Hoja 2' => new Compra( $this->codigo,$this->fecha,$this->fecha2),
+                'Hoja 2' => new Compra( $this->codigo,$this->fecha,$this->fecha2),
+    
+                // Agrega más hojas según tus necesidades
+            ];
 
-            // Agrega más hojas según tus necesidades
-        ];
+        }elseif ($this->hoja== 'Venta') {
+            return [
+            
+                'Hoja 1' => new Ventas( $this->codigo,$this->fecha,$this->fecha2),
+    
+                // Agrega más hojas según tus necesidades
+            ];
+        }
+
     }
 }

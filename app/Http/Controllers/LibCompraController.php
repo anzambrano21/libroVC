@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\libCompra;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class LibCompraController extends Controller
 {
@@ -21,6 +22,7 @@ class LibCompraController extends Controller
     public function store(Request $request)
     {
         libCompra::create([
+            'proveedor'=>$request['prov'],
             'provedor'=>$request['cli'],
             'numfactur'=>$request['Nf'],
             'fechafactur'=>$request['Ff'],
@@ -34,6 +36,7 @@ class LibCompraController extends Controller
             'facPolar'=>$request['Fp'],
             'documento'=>$request['Doc'],
             'pornacional'=>$request['ImN'],
+            'montoimputotal'=>$request['monisv'],
         ]);
         return $request;
     }
@@ -43,7 +46,17 @@ class LibCompraController extends Controller
      */
     public function show( $libCompra)
     {
-        return libCompra::where("provedor",$libCompra)->get();
+        return $libCompra;
+        //return libCompra::where("provedor",$libCompra)->get();
+    }
+    public function buscar()  {
+        $cidi = request('cidi');
+        $fecha1 = Carbon::createFromFormat('d/m/Y', request('fecha1'))->format('Y/m/d');
+        $fecha2 = Carbon::createFromFormat('d/m/Y', request('fecha2'))->format('Y/m/d');
+        return libCompra::where('provedor', $cidi)
+                            ->whereBetween('fechafactur', [$fecha1, $fecha2])
+                                ->get();
+        
     }
 
     /**

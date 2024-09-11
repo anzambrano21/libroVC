@@ -69,6 +69,7 @@ class ClienteController extends Controller
             'contribuyente'=>$request['con'],
             'patente'=>$request['paten'],
             'cajaregistradora'=>$request['regis'],
+            
 
         ]);
         return $id;

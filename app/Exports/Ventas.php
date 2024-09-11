@@ -9,9 +9,15 @@ use  Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use App\Models\libVentas;
 class Ventas implements FromView,WithColumnWidths, WithStyles
-
 {
+    private $codigo,$fecha,$fecha2;
+    public function __construct($dato1,$dato2,$dato3) {
+        $this->codigo=$dato1;
+        $this->fecha=$dato2;
+        $this->fecha2=$dato3;
+    }
     /**
     * @return \Illuminate\Support\Collection
     */
@@ -19,7 +25,7 @@ class Ventas implements FromView,WithColumnWidths, WithStyles
     public function View() :View
     {
         return view("Venta",[
-            "Ventas"=> DB::table('libro_venta')->get()
+            "datos" => libVentas::where('cliente', $this->codigo)->whereBetween('fechafactur', [$this->fecha, $this->fecha2])->get()
         ]);
     }
 public function styles(Worksheet $sheet) {

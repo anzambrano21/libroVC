@@ -7,6 +7,8 @@ import { Exaplecontect } from "../context/contexto"
 
 export const LibroV = () => {
     const example = useContext(Exaplecontect)
+    console.log(example.datos);
+    
     const [data2, setdatos] = useState([]);
     
     
@@ -38,9 +40,10 @@ export const LibroV = () => {
             Hast:document.getElementById('Hast').value,
             Con:document.getElementById("Con").value,
             DocA:document.getElementById('docA').value,
+            Ff:document.getElementById('Ff').value,
             Fr:document.getElementById('Fr').value,
             rif:document.getElementById('rif').value,
-            cli:document.getElementById('cli').value,
+            cli:example.datos.codi,
             MonIsv:document.getElementById('monisv').value,
             Ex:document.getElementById('Ex').value,
             Bg:document.getElementById('Bg').value,
@@ -51,15 +54,12 @@ export const LibroV = () => {
             MonIGTF:document.getElementById('MonIGTF').value,
             por:document.getElementById('porcen').value,
             Facp:document.getElementById('FacPol').value,
-            
-            mondol:document.getElementById('monto$').value
+            Doc:document.getElementById('Documento').value,
+            mondol:document.getElementById('monto$').value,
+            tasa:document.getElementById('tasa').value
 
         }
         console.log(user);
-        
-
-
-
         const response = await fetch('http://127.0.0.1:8000/api/LibVenta', {
             method: 'POST',
             headers: {
@@ -83,8 +83,10 @@ export const LibroV = () => {
         document.getElementById('monisv'),
         document.getElementById('Ex'),
         document.getElementById('CajaR'),
-
-        document.getElementById('MonIGTF')
+        document.getElementById('MonCan'),
+        document.getElementById('tasa'),
+        document.getElementById('monto$'),
+        document.getElementById('MonIGTF'),
         ]
         if (e.key === 'Enter') {
             // Cambiar el foco al siguiente campo de entrada
@@ -110,6 +112,56 @@ export const LibroV = () => {
         ivae=document.getElementById('Ex').value*0.16;
         document.getElementById('MonCan').value=document.getElementById('isvg').value-ivae
     }
+    function completar(index) {
+        indice=data2[index].id
+        document.getElementById('Nf').value=data2[index].numfactur
+        document.getElementById('Hast').value=data2[index].hasta
+        document.getElementById('Con').value=data2[index].control
+        document.getElementById('docA').value=data2[index].docafecta
+        document.getElementById('Fr').value=data2[index].fecharegistro
+        document.getElementById('Ff').value=data2[index].fechafactur
+        document.getElementById('rif').value=data2[index].rif
+        document.getElementById('monisv').value=data2[index].montoimputotal
+        document.getElementById('Ex').value=data2[index].basee
+        document.getElementById('Bg').value=data2[index].basenacional
+        document.getElementById('isvg').value=data2[index].impunacional
+        document.getElementById('CajaR').value=data2[index].registradora
+        document.getElementById('FacPol').value=data2[index].docpolar1
+        document.getElementById('Documento').value=data2[index].documento
+        document.getElementById('porcen').value=data2[index].porcentaje
+        document.getElementById('MonCan').value=data2[index].Impuesto
+        document.getElementById('MonIGTF').value=data2[index].igtfmontosobre
+        document.getElementById('monto$').value=data2[index].igtfdolares
+        
+    }
+    const imprimir= async()=>{
+        
+        let datos={
+            cidi:example.datos.codi,
+            fecha1:example.datos.fech1,
+            fecha2:example.datos.fech2,
+            hoja:"Venta"
+        }
+        console.log(datos);
+        const queryString = new URLSearchParams(datos).toString();
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/export?${queryString}`, {
+                responseType: 'blob', // Importante para manejar archivos binarios
+            });
+            
+            
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'prueva.xlsx'); // Nombre del archivo
+            document.body.appendChild(link);
+            link.click();
+        } catch (error) {
+            console.error('Error descargando el archivo:', error);
+        }
+        
+         
+    }
 
     return (
         <div>
@@ -130,15 +182,15 @@ export const LibroV = () => {
                             <th className="col">Exenta</th>
                             <th>Base General </th>
                             <th>Impuesto General </th>
-                            <th>%10</th>
-                            <th>%16</th>
+                            <th>Porcentaje</th>
+
                             <th>Usuario</th>
                             <th>Registradora</th>
                             <th>Por Retener</th>
                             <th>Retencion</th>
                             <th>Comprobante</th>
                             <th>Fecha comprobante</th>
-                            <th>Fecha Registro</th>
+                            <th>Fecha Factura</th>
                             <th>Factura polar</th>
                             <th>Auditoria</th>
                             <th>Por IGTF</th>
@@ -149,29 +201,29 @@ export const LibroV = () => {
                     </thead>
                     <tbody>
                     {data2.map((item, index) => (
-                        <tr key={index}>
+                        <tr key={index} onClick={() => completar(index)}>
                             <td>{index}</td>
                             <td>{item.hasta}</td>
                             <td>{item.control}</td>
-                            <td>{item.created_at}</td>
+                            <td>{item.fecharegistro}</td>
                             <td>{item.documento}</td>
                             <td>{item.docafecta}</td>
                             <td>{item.rif}</td>
-                            <td>{item.cliente}</td>
+                            <td>{example.datos.clien}</td>
                             <td>{item.montoimputotal}</td>
                             <td>{item.basee}</td>
                             <td>{item.basenacional}</td>
                             <td>{item.impunacional}</td>
-                            <td>{}</td>
-                            <td>{}</td>
-                            <td>{}</td>
+                            <td>{item.impunacional}</td>
+                            <td>{item.porcentaje}</td>
+                            
                             <td>{item.registradora}</td>
                             <td>{}</td>
                             <td>{}</td>
                             <td>{}</td>
                             <td>{}</td>
-                            <td>{}</td>
-                            <td>{}</td>
+                            <td>{item.fechafactur}</td>
+                            <td>{item.docpolar1}</td>
                             <td>{}</td>
                             <td>{}</td>
                         </tr>
@@ -195,11 +247,15 @@ export const LibroV = () => {
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Doc Afectado</p>
-                        <input onKeyPress={handleKeyDown} id='docA'  defaultValue={new Date().toLocaleDateString('es-VE')+'/ Nombre de usuario/nombre Cliente'}  className='col-sm-6' type="text" />
+                        <input onKeyPress={handleKeyDown} id='docA'  defaultValue={new Date().toLocaleDateString('es-VE')+'/'+example.datos.user+'/'+ example.datos.clien}  className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
-                        <p className='col-sm-5'>Fecha</p>
-                        <input onKeyPress={handleKeyDown} id='Fr'  className='col-sm-6' type="date" />
+                        <p className='col-sm-5'>Fecha Factura</p>
+                        <input onKeyPress={handleKeyDown} id='Ff'  className='col-sm-6' type="date" />
+                    </div>
+                    <div className=' row '>
+                        <p className='col-sm-5'>Fecha Registro</p>
+                        <input onKeyPress={handleKeyDown} id='Fr' defaultValue={new Date().toISOString().split('T')[0]}  className='col-sm-6' type="date" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>RIF</p>
@@ -207,7 +263,7 @@ export const LibroV = () => {
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Cliente</p>
-                        <input onKeyPress={handleKeyDown} id='cli'  className='col-sm-6' type="text" />
+                        <input onKeyPress={handleKeyDown} id='cli' defaultValue={ example.datos.clien}  className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Monto Incluyendo ISV</p>
@@ -234,16 +290,13 @@ export const LibroV = () => {
                         <p className='col-sm-5'>Monto a Cancelar</p>
                         <input onKeyPress={handleKeyDown} id='MonCan'  className='col-sm-6' type="text" />
                     </div>
-                    <div className=' row '>
-                        <p className='col-sm-5'>Monto IGTF</p>
-                        <input onKeyPress={handleKeyDown} id='MonIGTF'  className='col-sm-6' type="text" />
-                    </div>
+
                 </div>
                 <div className='Datos2 col-md-4'>
 
                     <div className="row ">
-                        <p className='row'>Documento</p>
-                        <select className='col-md-6' name="" id="">
+                        <p className='col-sm-7'>Documento</p>
+                        <select className='col-5 align-self-start' name="" id="Documento">
                             <option value="Factura">Factura</option>
                             <option value="Nota de Credito">Nota de Credito</option>
                             <option value="Nota de Debito">Nota de Debito</option>
@@ -251,8 +304,8 @@ export const LibroV = () => {
                         </select>
                     </div>
                     <div className="row mt-3 pb-3 ">
-                        <p className='row'>Tipo de Factura Polar</p>
-                        <select className='col-md-6' name="" id="FacPol">
+                        <p className='col-sm-7'>Tipo de Factura Polar</p>
+                        <select className='col-5 align-self-start' name="" id="FacPol">
                             <option value="nada"></option>
                             <option value="Cervesa">Cervesa</option>
                             <option value="Harina">Harina</option>
@@ -277,16 +330,20 @@ export const LibroV = () => {
                         </select>
 
                     </div>
-                    <br />
-                    <div className="row mt-2 ">
+
+                    <div className="row  ">
 
                         <p className='col-sm-7'>TASA</p>
-                        <input className='col-sm-5' id='tasa' type="text" />
+                        <input onKeyPress={handleKeyDown} className='col-sm-5' id='tasa' type="text" />
                     </div>
-                    <div className="row  pb-5">
+                    <div className="row  ">
 
                         <p className='col-sm-7'>Monto $ IGTF</p>
-                        <input className='col-sm-5' id='monto$' type="text" />
+                        <input onKeyPress={handleKeyDown} className='col-sm-5' id='monto$' type="text" />
+                    </div>
+                    <div className=' row  pb-4'>
+                        <p className='col-sm-7'>Monto IGTF</p>
+                        <input onKeyPress={handleKeyDown} id='MonIGTF'  className='col-sm-5' type="text" />
                     </div>
                     <div className="row  justify-content-between">
                         <button className='col-sm-5 '>Registradora 10%</button>
@@ -345,7 +402,7 @@ export const LibroV = () => {
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Exel" />
+                        <input onClick={imprimir} type="button" className='col-sm-5' value="Libro V" />
 
                     </div>
                     <div className="row justify-content-center mt-2">

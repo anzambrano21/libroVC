@@ -14,4 +14,5 @@ Route::apiResource("LibVenta",LibVentasController::class);
 Route::apiResource("LibCompra",LibCompraController::class);
 Route::apiResource("usuario",UsuarioController::class);
 Route::post("/login",[UsuarioController::class,'log']);
+Route::match(['get', 'post'], '/busCom',[LibCompraController::class,'buscar']);
 Route::match(['get', 'post'], '/buscar',[ClienteController::class,'buscar']);

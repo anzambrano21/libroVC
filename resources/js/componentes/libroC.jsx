@@ -4,22 +4,32 @@ import '../../css/libroV.css';
 import axios from 'axios';
 import { Exaplecontect } from "../context/contexto"
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { Alert } from 'bootstrap';
 
 export const LibroC = () => {
 
     const [data2, setdatos] = useState([]);
-
+    
+    
     const example = useContext(Exaplecontect)
     const consulta = async () => {
+        let datos={
+            cidi:example.datos.codi,
+            fecha1:example.datos.fech1,
+            fecha2:example.datos.fech2
+        }
+        console.log(datos);
+        
+        const queryString = new URLSearchParams(datos).toString();
         try {
-            console.log(example.datos.codi);
-            let reponse = await axios.get(`http://127.0.0.1:8000/api/LibCompra/${example.datos.codi}`)
+            
+            let reponse = await axios.get(`http://127.0.0.1:8000/api/busCom?${queryString}`)
             console.log(reponse);
             setdatos(reponse.data)
 
 
         } catch (error) {
-            console.log(error);
+           alert(error)
 
         }
 
@@ -29,37 +39,45 @@ export const LibroC = () => {
         consulta()
     }, []);
     const registrar = async () => {
-        let user = {
-            Nf: document.getElementById('Nf').value,
-            codF: document.getElementById('codF').value,
-            docA: document.getElementById('docA').value,
-            Fr: document.getElementById('Fr').value,
-            Ff: document.getElementById('Ff').value,
-            rif: document.getElementById('rif').value,
-            cli: document.getElementById('cli').value,
-            monisv: document.getElementById('monisv').value,
-            Ex: document.getElementById('Ex').value,
-            Bi: document.getElementById('Bg').value,
-            isvi: document.getElementById('Miva').value,
-            Fp: document.getElementById('Fp').value,
-            Doc: document.getElementById('Doc').value,
-            ImN: document.getElementById('In').value,
+        if (('codi' in example.datos) && indice==null) {
+            let user = {
+                Nf: document.getElementById('Nf').value,
+                codF: document.getElementById('codF').value,
+                docA: document.getElementById('docA').value,
+                Fr: document.getElementById('Fr').value,
+                Ff: document.getElementById('Ff').value,
+                rif: document.getElementById('rif').value,
+                cli: example.datos.codi,
+                prov:document.getElementById('cli').value,
+                monisv: document.getElementById('monisv').value,
+                Ex: document.getElementById('Ex').value,
+                Bi: document.getElementById('Bg').value,
+                isvi: document.getElementById('Miva').value,
+                Fp: document.getElementById('Fp').value,
+                Doc: document.getElementById('Doc').value,
+                ImN: document.getElementById('In').value,
+            }
+    
+    
+    
+            const response = await fetch('http://127.0.0.1:8000/api/LibCompra', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+            
+        }else{
+            alert("necesitas Activar un cliente")
         }
 
 
 
-        const response = await fetch('http://127.0.0.1:8000/api/LibCompra', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user),
-        });
-        console.log(response);
-
 
     }
     let indice=null
+
 
     const handleKeyDown = (e) => {
         let inputs = [document.getElementById('Nf'),
@@ -111,7 +129,12 @@ export const LibroC = () => {
     }
     const Eliminar= async()=>{
         axios.delete(`http://127.0.0.1:8000/api/LibCompra/${indice}`)
+        indice=null
         
+        
+    }
+    const Modificar=async()=>{
+        indice=null
         
     }
     const imprimir= async()=>{
@@ -119,7 +142,9 @@ export const LibroC = () => {
         let datos={
             cidi:example.datos.codi,
             fecha1:example.datos.fech1,
-            fecha2:example.datos.fech2
+            fecha2:example.datos.fech2,
+            hoja:"Compra"
+
         }
         console.log(datos);
         const queryString = new URLSearchParams(datos).toString();
@@ -152,6 +177,7 @@ export const LibroC = () => {
 
     }
     const today = new Date().toISOString().split('T')[0];
+    console.log(data2);
     return (
         <div className='col'>
             <div className="tabla">
@@ -309,7 +335,7 @@ export const LibroC = () => {
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-6' value="Modificar" />
+                        <input type="button" onClick={Modificar} className='col-sm-6' value="Modificar" />
 
                     </div>
                     <div className="row justify-content-center mt-2">

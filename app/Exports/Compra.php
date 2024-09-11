@@ -9,6 +9,7 @@ use  Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use App\Models\libCompra;
 
 class Compra implements FromView,WithColumnWidths, WithStyles
 {
@@ -25,9 +26,8 @@ class Compra implements FromView,WithColumnWidths, WithStyles
     {
         
         return view("Compra",[
-            "codigo" => $this->codigo,
-            "fecha" => $this->fecha,
-            "fecha2" => $this->fecha2,
+            "datos" => libCompra::where('provedor', $this->codigo)->whereBetween('fechafactur', [$this->fecha, $this->fecha2])->get()
+
         ]);
     }
 public function styles(Worksheet $sheet) {
@@ -47,8 +47,8 @@ public function styles(Worksheet $sheet) {
             'F'=>9,
             'G'=>9,
             'H'=>9,
-            'I'=>9,
-            'J'=>4,
+            'I'=>4,
+            'J'=>9,
             'K'=>9,
             
 

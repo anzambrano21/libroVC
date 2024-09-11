@@ -50,9 +50,13 @@ export const Activar = () => {
     const Activar= ()=>{
         if (cliente!=null && date!=null) {
             let activado={
+                user:example.datos.user,
+                home:example.datos.home,
+                rol:example.datos.rol,
                 fech1:formatDate(date[0]),
                 fech2:formatDate(date[1]),
-                codi:cliente.codi
+                codi:cliente.codi,
+                clien:cliente.nombre
             } 
             example.setDatos(activado)
             

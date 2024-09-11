@@ -26,7 +26,8 @@ class LibVentasController extends Controller
             "hasta"=>$request["Hast"],
             "control"=>$request["Con"],
             "docafecta"=>$request["DocA"],
-            "fechafactur"=>$request["Fr"],
+            "fechafactur"=>$request["Ff"],
+            "fecharegistro"=>$request["Fr"],
             "rif"=>$request["rif"],
             "cliente"=>$request["cli"],
             "montoimputotal"=>$request["MonIsv"],
@@ -37,9 +38,11 @@ class LibVentasController extends Controller
             "registradora"=>$request["CajaR"],
             "porcentaje"=>$request["por"],
             "docpolar1"=>$request["Facp"],
-            "impuesto"=>$request["Moncan"],
+            "Impuesto"=>$request["Moncan"],
             "igtfdolares"=>$request["mondol"],
             "igtfmontosobre"=>$request["MonIGTF"],
+            "documento"=>$request["Doc"]
+            
 
         ]);
         return $request;
