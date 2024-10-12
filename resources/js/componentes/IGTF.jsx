@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
-import '../../css/libroV.css';
+//import '../../css/libroV.css';
 import { Exaplecontect } from "../context/contexto";
 
 export const IGTF = () => {

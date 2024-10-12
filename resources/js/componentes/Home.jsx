@@ -8,9 +8,12 @@ import { LibroC } from './libroC';
 import { Cliente } from './Cliente';
 import { Activar } from './Activar';
 import { Registro } from './usuario.jsx';
-import { Menu } from './menu.jsx';
+
 import { IGTF } from "./IGTF.jsx";
 import { Hoja7 } from "./hoja7.jsx";
+import {RetenC} from "./retenciones.jsx";
+import "../../css/menu.css";
+
 import ExamplecontexProvier, { Exaplecontect } from "../context/contexto"
 export default function Home() {
     const currentURL = window.location.href;
@@ -33,13 +36,13 @@ export default function Home() {
                         <div className='dashboard-nav-dropdown'>
                             <a href="/" className={(url=="" )? "dashboard-nav-item active dashboard-nav-dropdown-toggle":"dashboard-nav-item dashboard-nav-dropdown-toggle"}> Activar </a>
 
-                            <div className='dashboard-nav-dropdown'><a href="#!"
-                                className={(url=="Retenciones" )? "dashboard-nav-item active dashboard-nav-dropdown-toggle":"dashboard-nav-item dashboard-nav-dropdown-toggle"}>Retenciones</a>
+                            <div className='dashboard-nav-dropdown'><a href="Reten"
+                                className={(url=="Reten" )? "dashboard-nav-item active dashboard-nav-dropdown-toggle":"dashboard-nav-item dashboard-nav-dropdown-toggle"}>Retenciones</a>
                             </div>
                             <a href="Hoja7" className="dashboard-nav-item"><i className="fas fa-cogs"></i>Hoja 7 </a><a href="IGTF"
                                 className="dashboard-nav-item"><i className="fas fa-user"></i> IGTF </a>
                             <div className="nav-item-divider"></div>
-                            <a href="#" className="dashboard-nav-item"><i className="fas fa-sign-out-alt"></i> Logout </a>
+                            <a href="/inicio" className="dashboard-nav-item"><i className="fas fa-sign-out-alt"></i> Logout </a>
                         </div>
                     </div>
                 </nav>
@@ -48,16 +51,18 @@ export default function Home() {
                 <BrowserRouter>
 
                     <Routes>
-                        <Route path='/menu' element={<Menu />} />
-                        <Route path='/registro' element={<Registro />} />
-                        <Route path='/' element={<Activar />} />
-                        <Route path='/Cliente' element={<Cliente />} />
+                        
+                        
+
                         <Route path='/LibroV' element={<LibroV />} />
                         <Route path='/LibroC' element={<LibroC />} />
                         <Route path='/inicio' element={<Inicio />} />
-                        <Route path='/registro/*' element={<Registro />} />
-                        <Route path='/IGTF' element={<IGTF/>}/>
-                        <Route path='/Hoja7' element={<Hoja7/>}/>
+                        <Route path='/IGTF' element={<IGTF />} />
+                        <Route path='/Hoja7' element={<Hoja7 />} />
+                        <Route path='/Reten' element={<RetenC />} />
+                        <Route path='/Cliente' element={<Cliente />} />
+                        <Route path='/' element={<Activar />} />
+                        <Route path='/Registro' element={<Registro />} />
 
 
                     </Routes>
@@ -70,8 +75,9 @@ export default function Home() {
 
     );
 }
-
+console.log("error")
 if (document.getElementById('codeareact')) {
+    
     createRoot(document.getElementById('codeareact')).render(
         <ExamplecontexProvier>
             <Home />

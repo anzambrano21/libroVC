@@ -1,15 +1,14 @@
 import React, { useState,useEffect,useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import '../../css/libroV.css';
+//import '../../css/libroV.css';
 import axios from 'axios';
 import { Exaplecontect } from "../context/contexto"
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Importa los estilos
 import dayjs from "dayjs"; // ES 2015
 
-let res = await fetch('http://127.0.0.1:8000/api/cliente');
-let myData = await res.json();
-let data2 = myData;
+
+
 
 
 const events = [
@@ -19,15 +18,33 @@ const events = [
         end: new Date(2024, 7, 12),
     },]
 export const Activar = () => {
+    const [datos, setdatos] = useState(null);
+    const [date, setDate] = useState(null);
+    const [cliente, setcliente] = useState(null);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         document.title = 'Activcion de Cliente';
+        const fetchData = async () => {
+            try {
+                let res = await fetch('http://127.0.0.1:8000/api/cliente');
+                let myData = await res.json();
+                setdatos(myData);
+              } catch (error) {
+                console.error('Error fetching data:', error);
+              } finally {
+                setLoading(false);
+              }
+          };
+      
+          fetchData();
       }, []); 
     const example = useContext(Exaplecontect)
     console.log(example);
-    
-    const [datos, setdatos] = useState(data2);
-    const [date, setDate] = useState(null);
-    const [cliente, setcliente] = useState(null);
+    if (loading) {
+        return <p>Cargando datos...</p>;
+      }
+   
+
     
     const formatDate = (date) => {
         return dayjs(date).format("DD/MM/YYYY");

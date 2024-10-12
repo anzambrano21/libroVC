@@ -3,11 +3,29 @@ import '../../css/registro.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
 import { Exaplecontect } from "../context/contexto"
-let res = await fetch('http://127.0.0.1:8000/api/usuario');
-let myData = await res.json();
-let data2 = myData;
+
 export const Registro = () => {
-    console.log(data2);
+    const [data2, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        document.title = 'Registro de Cliente';
+        const fetchData = async () => {
+            try {
+                let res = await fetch('http://127.0.0.1:8000/api/usuario');
+                let myData = await res.json();
+                setData(myData);
+              } catch (error) {
+                console.error('Error fetching data:', error);
+              } finally {
+                setLoading(false);
+              }
+          };
+      
+          fetchData();
+      }, []); 
+      if (loading) {
+        return <p>Cargando datos...</p>;
+      }
 
     const registrar = async () => {
 

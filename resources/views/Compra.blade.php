@@ -36,7 +36,7 @@
 
             </tr>
             <tr>
-                <th style="text-align: center;" colspan="11"></th>
+                <th style="text-align: center;" colspan="11">Libro de Compra</th>
             </tr>
             <tr></tr>
             <tr>
@@ -52,7 +52,7 @@
             <tr>
                 <th style="border:  solid ;">Base</th>
                 <th style="border:  solid ;">%</th>
-                <th style="border:  solid ;">Inpuesto</th>
+                <th style="border:  solid ;">Impuesto</th>
             </tr>
         </thead>
         <tbody>

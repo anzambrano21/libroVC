@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
-import '../../css/libroV.css';
+//import '../../css/libroV.css';
 import { Exaplecontect } from "../context/contexto";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Importa los estilos
@@ -37,11 +37,11 @@ export const Hoja7 = () => {
                 <div className="Datos col-md-4 ">
                     <div className=' row '>
                         <p className='col-sm-5'>Clinete</p>
-                        <input id='Nf'  className='col-sm-6' type="text" />
+                        <input id='Cl'  className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Codigo</p>
-                        <input id='Nf'  className='col-sm-6' type="text" />
+                        <input id='Cod'  className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Numero</p>

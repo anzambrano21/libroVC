@@ -57,7 +57,7 @@
             <tr>
                 <th style="border:  solid ;">Base</th>
                 <th style="border:  solid ;">%</th>
-                <th style="border:  solid ;">Inpuesto</th>
+                <th style="border:  solid ;">Impuesto</th>
             </tr>
         </thead>
         <tbody>
@@ -92,6 +92,7 @@
                                 <td style="border:  solid ;"></td>
                             @endif
                             @php
+                                $TvmIva+=$registro->montoimputotal;
                                 $Tbase += $registro->basenacional;
 
                                 $impuesto += $registro->impunacional;

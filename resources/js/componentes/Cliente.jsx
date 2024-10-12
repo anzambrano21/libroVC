@@ -2,18 +2,34 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../css/libroV.css';
 import axios from 'axios';
-let res = await fetch('http://127.0.0.1:8000/api/cliente');
-let myData = await res.json();
-let data2 = myData;
+
 
 export const Cliente = () => {
-    useEffect(() => {
-        document.title = 'Registro de Cliente';
-      }, []); 
+    const [data, setData] = useState(null);
     const [tipoContribuyente, setTipoContribuyente] = useState('Especial');
     const [tipoPatente, setTipoPatente] = useState('Con Patente');
     const [tipoRegistradora, setRegistradora] = useState('Con Caja Registradora');
-    let cliente = data2
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        document.title = 'Registro de Cliente';
+        const fetchData = async () => {
+            try {
+                let res = await fetch('http://127.0.0.1:8000/api/cliente');
+                let myData = await res.json();
+                setData(myData);
+              } catch (error) {
+                console.error('Error fetching data:', error);
+              } finally {
+                setLoading(false);
+              }
+          };
+      
+          fetchData();
+      }, []); 
+      if (loading) {
+        return <p>Cargando datos...</p>;
+      }
+
 
     const manejarCambioTipo = (e) => {
         setTipoContribuyente(e.target.value);
@@ -46,6 +62,7 @@ export const Cliente = () => {
         }
         let response = await axios.post('http://127.0.0.1:8000/api/cliente', user)
         console.log(response);
+        alert("Cliente Registrado")
 
 
     }
@@ -67,6 +84,8 @@ export const Cliente = () => {
 
 
     }
+    
+    
     return (
         <div>
             <div className="tabla2">
@@ -87,7 +106,7 @@ export const Cliente = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {cliente.map((item, index) => (
+                        {data.map((item, index) => (
 
                             <tr key={index + 1} onClick={() => completar(index)}>
 
@@ -192,7 +211,7 @@ export const Cliente = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {cliente.map((item, index) => (
+                                {data.map((item, index) => (
 
                                     <tr key={index + 1}>
 

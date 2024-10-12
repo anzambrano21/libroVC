@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import '../../css/libroV.css';
+//import '../../css/libroV.css';
 import axios from 'axios';
 import { Exaplecontect } from "../context/contexto"
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
@@ -12,13 +12,15 @@ export const LibroC = () => {
     
     
     const example = useContext(Exaplecontect)
+    console.log(example.datos);
+    
     const consulta = async () => {
         let datos={
             cidi:example.datos.codi,
             fecha1:example.datos.fech1,
             fecha2:example.datos.fech2
         }
-        console.log(datos);
+        
         
         const queryString = new URLSearchParams(datos).toString();
         try {
@@ -39,6 +41,8 @@ export const LibroC = () => {
         consulta()
     }, []);
     const registrar = async () => {
+        
+        
         if (('codi' in example.datos) && indice==null) {
             let user = {
                 Nf: document.getElementById('Nf').value,
@@ -59,17 +63,23 @@ export const LibroC = () => {
             }
     
     
-    
-            const response = await fetch('http://127.0.0.1:8000/api/LibCompra', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(user),
-            });
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/LibCompra', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(user),
+                });
+                alert("Factura Registrada")
+                
+            } catch (error) {
+                alert(error)
+            }
+
             
         }else{
-            alert("necesitas Activar un cliente")
+            alert("necesitas Activar un cliente o tratas de registrar la misma Factura")
         }
 
 
@@ -77,6 +87,7 @@ export const LibroC = () => {
 
     }
     let indice=null
+    let ide=null
 
 
     const handleKeyDown = (e) => {
@@ -97,12 +108,12 @@ export const LibroC = () => {
             // Cambiar el foco al siguiente campo de entrada
             // Puedes ajustar esto según tu estructura de componentes
 
-            indice++
-            if (indice > inputs.length - 1) {
+            ide++
+            if (ide > inputs.length - 1) {
                 registrar()
-                indice = 0;
+                ide = 0;
             }
-            inputs[indice].focus()
+            inputs[ide].focus()
 
         }
     }
@@ -122,7 +133,7 @@ export const LibroC = () => {
             document.getElementById('Fp').value=data2[index].facPolar
             document.getElementById('Doc').value=data2[index].documento
             document.getElementById('In').value=data2[index].pornacional
-            alert('hola')
+            
 
 
 
@@ -157,11 +168,11 @@ export const LibroC = () => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'prueva.xlsx'); // Nombre del archivo
+            link.setAttribute('download', 'LibroCompra.xlsx'); // Nombre del archivo
             document.body.appendChild(link);
             link.click();
         } catch (error) {
-            console.error('Error descargando el archivo:', error);
+            alert('Error descargando el archivo:', error);
         }
         
          
@@ -260,8 +271,8 @@ export const LibroC = () => {
                         <input onKeyPress={handleKeyDown} id='rif' className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
-                        <p className='col-sm-5'>Provedor</p>
-                        <input onKeyPress={handleKeyDown} id='cli' className='col-sm-6' type="text" />
+                        <p className='col-sm-5'>Proveedor</p>
+                        <input onKeyPress={handleKeyDown} id='cli' defaultValue={example.datos.codi} className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Monto Incluyendo ISV</p>
@@ -285,7 +296,7 @@ export const LibroC = () => {
                     <div className="row justify-content-center">
                         <p className='row justify-content-center'>Factura Polar</p>
                         <select className='col-md-6 ' name="" id="Fp">
-                            <option value="Cervesa">Cervesa</option>
+                            <option value="Cervesa">Cerveza</option>
                             <option value="Harina">Harina</option>
                             <option value="Ketchup">Ketchup</option>
                             <option value="P&G">P&G</option>
@@ -308,7 +319,7 @@ export const LibroC = () => {
                         <select onChange={BaseGeneral} className='col-md-6' name="" id="In">
                             <option value="16">16</option>
                             <option value="8">8</option>
-                            <option value="31">31</option>
+                            <option value="21">21</option>
                             <option value="12">12</option>
                         </select>
                     </div>
@@ -343,7 +354,7 @@ export const LibroC = () => {
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-6' value="Cambiar Provedor" />
+                        <input type="button" className='col-sm-6' value="Cambiar Proveedor" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
