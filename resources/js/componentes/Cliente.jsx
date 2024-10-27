@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../css/libroV.css';
 import axios from 'axios';
-
+import Select from 'react-select';
 
 export const Cliente = () => {
     const [data, setData] = useState(null);
+    const [dataT, setDataT] = useState(null);
     const [tipoContribuyente, setTipoContribuyente] = useState('Especial');
     const [tipoPatente, setTipoPatente] = useState('Con Patente');
     const [tipoRegistradora, setRegistradora] = useState('Con Caja Registradora');
     const [loading, setLoading] = useState(true);
+
+    const [ban, setban] = useState(false);
+    const [indice, setIndice] = useState(null);
+    const [indice2, setIndice2] = useState(null);
+    const [sucursal, setsucursal] = useState([]);
     useEffect(() => {
         document.title = 'Registro de Cliente';
         const fetchData = async () => {
@@ -17,20 +23,21 @@ export const Cliente = () => {
                 let res = await fetch('http://127.0.0.1:8000/api/cliente');
                 let myData = await res.json();
                 setData(myData);
-              } catch (error) {
+                setDataT(myData);
+            } catch (error) {
                 console.error('Error fetching data:', error);
-              } finally {
+            } finally {
                 setLoading(false);
-              }
-          };
-      
-          fetchData();
-      }, []); 
-      if (loading) {
+            }
+        };
+
+        fetchData();
+    }, []);
+    if (loading) {
         return <p>Cargando datos...</p>;
-      }
+    }
 
-
+    
     const manejarCambioTipo = (e) => {
         setTipoContribuyente(e.target.value);
     };
@@ -42,8 +49,68 @@ export const Cliente = () => {
     };
 
 
+    const buscarCliente = (e) => {
+        if (e.target.value == '') {
+            console.log(e.target.value == '');
 
+            setData(dataT)
+            return
+        }
+
+
+        setData(dataT.filter(dataT => dataT.codi === e.target.value))
+    };
+
+
+
+    function completar(index) {
+        
+
+        setIndice(data[index]['codi']) 
+        document.getElementById('cod').value = data[index]['codi']
+        document.getElementById('Nom').value = data[index]['nombre']
+        document.getElementById('Rep').value = data[index]['representante']
+        document.getElementById('rif').value = data[index]['rif']
+
+        document.getElementById('dire').value = data[index]['direccion']
+        document.getElementById('telef').value = data[index]['telefono']
+        document.getElementById('Num').value = data[index]['numero']
+
+        document.getElementById('paten').value = data[index]['patente']
+        document.getElementById('regis').value = data[index]['cajaregistradora']
+        document.getElementById('contri').value = data[index]['contribuyente']
+
+
+
+    }
+    function completar2(index) {
+        setIndice2(sucursal[index]["codigosucursal"])
+        document.getElementById('NomSucur').value = sucursal[index]['nombresucursal']
+    }
     const registrar = async () => {
+        console.log(indice);
+
+        if (indice != null) {
+            let user = {
+                codi: document.getElementById('cod').value,
+                nom: document.getElementById('Nom').value,
+                rep: document.getElementById('Rep').value,
+                rif: document.getElementById('rif').value,
+
+                dire: document.getElementById('dire').value,
+                telef: document.getElementById('telef').value,
+                num: document.getElementById('Num').value,
+
+
+                con: tipoContribuyente,
+                paten: tipoPatente,
+                regis: tipoRegistradora,
+
+            }
+            let response = await axios.put(`http://127.0.0.1:8000/api/cliente/${document.getElementById('cod').value}`, user)
+            console.log(response);
+            return
+        }
         let user = {
             codi: document.getElementById('cod').value,
             nom: document.getElementById('Nom').value,
@@ -53,7 +120,7 @@ export const Cliente = () => {
             dire: document.getElementById('dire').value,
             telef: document.getElementById('telef').value,
             num: document.getElementById('Num').value,
-            subC: document.getElementById('sucur').value,
+
 
             con: tipoContribuyente,
             paten: tipoPatente,
@@ -63,29 +130,57 @@ export const Cliente = () => {
         let response = await axios.post('http://127.0.0.1:8000/api/cliente', user)
         console.log(response);
         alert("Cliente Registrado")
-
+        limpieza()
 
     }
-    function completar(index) {
+    const eliminar = async () => {
+        let response = await axios.delete(`http://127.0.0.1:8000/api/cliente/${indice}`)
+        console.log(response);
+    }
+    const Sucursal= async ()=>{
+        if(indice!=null){
+            setban(!ban)
+            let response = await axios.get  (`http://127.0.0.1:8000/api/sucursal/${indice}`)
+            setsucursal(response.data)
+        }
         
-        document.getElementById('cod').value=cliente[index]['codi']
-        document.getElementById('Nom').value=cliente[index]['nombre']
-        document.getElementById('Rep').value=cliente[index]['representante']
-        document.getElementById('rif').value=cliente[index]['rif']
+    }
+    function limpieza() {
+        indice=null
+        document.getElementById('cod').value = null
+        document.getElementById('Nom').value = null
+        document.getElementById('Rep').value = null
+        document.getElementById('rif').value = null
 
-        document.getElementById('dire').value=cliente[index]['direccion']
-        document.getElementById('telef').value=cliente[index]['telefono']
-        document.getElementById('Num').value=cliente[index]['numero']
-        document.getElementById('sucur').value=cliente[index]['sucursal']
-        document.getElementById('paten').value=cliente[index]['patente']
-        document.getElementById('regis').value=cliente[index]['cajaregistradora']
-        document.getElementById('contri').value=cliente[index]['contribuyente']
-
-
+        document.getElementById('dire').value = null
 
     }
-    
-    
+    const addSucursal = async ()=>{
+        if(indice!=null){
+            let sucur={
+                nomSucur: document.getElementById("NomSucur").value,
+                codi: document.getElementById('cod').value,
+
+            }
+            setban(!ban)
+            let response = await axios.post(`http://127.0.0.1:8000/api/sucursal`,sucur)
+            setsucursal(response.data)
+        }
+    }
+    const deletsucursal= async ()=>{
+        if(indice2!=null){
+            let sucur={
+                nomSucur: document.getElementById("NomSucur").value,
+                codi: document.getElementById('cod').value,
+
+            }
+            setban(!ban)
+            let response = await axios.put(`http://127.0.0.1:8000/api/sucursal/${indice2}`,sucur)
+            
+        }
+    }
+
+
     return (
         <div>
             <div className="tabla2">
@@ -127,11 +222,47 @@ export const Cliente = () => {
                     </tbody>
                 </table>
             </div>
+            <div className={`Datos3 RetenV ${ban ? '' : "None"} `}>
+            <div className="tabla2">
+                <table className='table table-striped'>
+                    <thead>
+                        <tr>
+                            <th className="col">Nombre</th>
+                            <th className="col">Codigo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {sucursal.map((item, index) => (
+
+                            <tr key={index + 1} onClick={() => completar2(index)}>
+
+                                <td >{item.nombresucursal}</td>
+                                <td >{item.codigosucursal}</td>
+
+                            </tr>
+                        ))}
+
+
+                    </tbody>
+                </table>
+            </div>
+
+                    
+                <div className="row">
+                    <p className='col-sm-5'>Nombre Sucursal</p>
+                    <input id='NomSucur' className='col-sm-6' type="text" />
+                </div>
+                <div className="row justify-content-around mb-3">
+                    <input type="button" className="col-md-5" value="Adicionar" onClick={addSucursal} />
+                    <input type="button" className="col-md-5" value="Eliminar" onClick={deletsucursal}/>
+                </div>
+
+            </div>
             <div className="d-flex formulario mt-4 justify-content-around">
                 <div className='Datos col-md-3'>
                     <div className=' row '>
                         <p className='col-sm-5'>Codigo</p>
-                        <input id='cod' className='col-sm-6' type="text" />
+                        <input id='cod' className='col-sm-6' type="text" onChange={buscarCliente} />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Nombre</p>
@@ -157,10 +288,7 @@ export const Cliente = () => {
                         <p className='col-sm-5'>Numero</p>
                         <input className='col-sm-6' type="number" name="" id="Num" />
                     </div>
-                    <div className=' row '>
-                        <p className='col-sm-5'>Sucursal</p>
-                        <input className='col-sm-6' type="text" id='sucur' />
-                    </div>
+
                     <div className=' row '>
                         <p className='col-sm-5'>Contribuyente</p>
                         <select className='col-sm-6' onChange={manejarCambioTipo} name="" id="contri">
@@ -205,7 +333,7 @@ export const Cliente = () => {
                                     <th className="col">Cod Cpc</th>
                                     <th className="col">Contribuyente</th>
                                     <th className="col">Patente</th>
-                                    
+
                                     <th className="col">Clave Patente</th>
                                     <th className="col">Clasificacion</th>
                                 </tr>
@@ -240,7 +368,7 @@ export const Cliente = () => {
 
                     </div>
                     <div className="row justify-content-around">
-                        <input className='col-sm-2' type="button" value="Adicion" onClick={registrar} />
+                        <input className='col-sm-2' type="button" value="Adicion" />
                         <input className='col-sm-2' type="button" value="Eliminar" />
                         <input className='col-sm-2' type="button" value="Refrescar" />
                     </div>
@@ -248,12 +376,12 @@ export const Cliente = () => {
                 </div>
                 <div className="botones col-md-2">
                     <div className="row justify-content-around mb-3">
-                        <input type="button" value="Adicion" className="col-md-5" />
+                        <input type="button" value="Adicion" className="col-md-5" onClick={registrar} />
                         <input type="button" value="Crear Data" className="col-md-5" />
                     </div>
                     <div className="row justify-content-around mb-3">
                         <input type="button" value="Consulta" className="col-md-5" />
-                        <input type="button" value="Eliminar" className="col-md-5" />
+                        <input type="button" value="Eliminar" className="col-md-5" onClick={eliminar} />
                     </div>
 
                     <div className="row justify-content-around mb-3">
@@ -262,22 +390,12 @@ export const Cliente = () => {
                     </div>
 
                     <div className="row justify-content-around mb-3">
-                        <input type="button" value="Refrescar" className="col-md-5" />
-                        <input type="button" value="Rastro" className="col-md-5" />
-                    </div>
-                    <div className="row justify-content-around mb-3">
-                        <input type="button" value="Meses" className="col-md-5" />
+                        <input type="button" value="Añadir Sucursal" className="col-md-5" onClick={Sucursal}/>
                         <input type="button" value="Impreso" className="col-md-5" />
                     </div>
-                    <div className="row justify-content-around mb-3">
-                        <input type="button" value="Exel" className="col-md-5" />
-                        <input type="button" value="Caja R" className="col-md-5" />
-                    </div>
 
-                    <div className="row justify-content-around mb-3">
-                        <input type="button" value="Borrador" className="col-md-5" />
-                        <input type="button" value="Salir" className="col-md-5" />
-                    </div>
+
+
 
 
 

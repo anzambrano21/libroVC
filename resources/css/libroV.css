@@ -21,3 +21,14 @@
     
     
   }
+.RetenV{
+    position: absolute;
+    background-color: blue;
+    border-radius: 5px;
+    margin-left: 30%;
+    padding: 2px;
+
+}
+.None{
+    display: none;
+}

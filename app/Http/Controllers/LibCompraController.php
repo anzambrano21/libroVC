@@ -54,7 +54,7 @@ class LibCompraController extends Controller
         $fecha1 = Carbon::createFromFormat('d/m/Y', request('fecha1'))->format('Y/m/d');
         $fecha2 = Carbon::createFromFormat('d/m/Y', request('fecha2'))->format('Y/m/d');
         return libCompra::where('provedor', $cidi)
-                            ->whereBetween('fechafactur', [$fecha1, $fecha2])
+                            ->whereBetween('fecharegistro', [$fecha1, $fecha2])
                                 ->get();
         
     }
@@ -62,10 +62,29 @@ class LibCompraController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, libCompra $libCompra)
+    public function update(Request $request, $id)
     {
-        //
+        $registro=libCompra::findOrFail($id);
+        $registro->proveedor=$request['prov'];
+        $registro->provedor=$request['cli'];
+        $registro->numfactur=$request['Nf'];
+        $registro->fechafactur=$request['Ff'];
+        $registro->fecharegistro=$request['Fr'];
+        $registro->rif=$request['rif'];
+        $registro->controlFac=$request['codF'];
+        $registro->docafectado=$request['docA'];
+        $registro->exentas=$request['Ex'];
+        $registro->basegeneral=$request['Bi'];
+        $registro->MontoIva=$request['isvi'];
+        $registro->facPolar=$request['Fp'];
+        $registro->documento=$request['Doc'];
+        $registro->pornacional=$request['ImN'];
+        $registro->montoimputotal=$request['monisv'];
+        $registro->save();
+        return "listo";
+
     }
+
 
     /**
      * Remove the specified resource from storage.

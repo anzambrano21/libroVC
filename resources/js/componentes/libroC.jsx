@@ -10,7 +10,7 @@ export const LibroC = () => {
 
     const [data2, setdatos] = useState([]);
     
-    
+    const [habili, sethabili] = useState(true);
     const example = useContext(Exaplecontect)
     console.log(example.datos);
     
@@ -34,6 +34,7 @@ export const LibroC = () => {
            alert(error)
 
         }
+        
 
     }
     useEffect(() => {
@@ -76,6 +77,7 @@ export const LibroC = () => {
             } catch (error) {
                 alert(error)
             }
+            location.reload();
 
             
         }else{
@@ -89,7 +91,35 @@ export const LibroC = () => {
     let indice=null
     let ide=null
 
-
+    const Modificar=async()=>{
+        let user = {
+            Nf: document.getElementById('Nf').value,
+            codF: document.getElementById('codF').value,
+            docA: document.getElementById('docA').value,
+            Fr: document.getElementById('Fr').value,
+            Ff: document.getElementById('Ff').value,
+            rif: document.getElementById('rif').value,
+            cli: example.datos.codi,
+            prov:document.getElementById('cli').value,
+            monisv: document.getElementById('monisv').value,
+            Ex: document.getElementById('Ex').value,
+            Bi: document.getElementById('Bg').value,
+            isvi: document.getElementById('Miva').value,
+            Fp: document.getElementById('Fp').value,
+            Doc: document.getElementById('Doc').value,
+            ImN: document.getElementById('In').value,
+        }
+        const response = await fetch(`http://127.0.0.1:8000/api/LibCompra/${indice}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+        });
+        indice=null
+        alert("Factura Modificado")
+        
+    }
     const handleKeyDown = (e) => {
         let inputs = [document.getElementById('Nf'),
         document.getElementById('codF'),
@@ -109,8 +139,11 @@ export const LibroC = () => {
             // Puedes ajustar esto según tu estructura de componentes
 
             ide++
-            if (ide > inputs.length - 1) {
+            if (ide > inputs.length - 1 && indice==null ) {
                 registrar()
+                ide = 0;
+            }else if(ide > inputs.length - 1 && indice!=null){
+                Modificar()
                 ide = 0;
             }
             inputs[ide].focus()
@@ -140,14 +173,12 @@ export const LibroC = () => {
     }
     const Eliminar= async()=>{
         axios.delete(`http://127.0.0.1:8000/api/LibCompra/${indice}`)
+        alert("Factura eliminado")
         indice=null
         
         
     }
-    const Modificar=async()=>{
-        indice=null
-        
-    }
+
     const imprimir= async()=>{
         
         let datos={
@@ -186,6 +217,18 @@ export const LibroC = () => {
 
 
 
+    }
+    const DocumentoAfec=(event)=>{
+        
+        
+        if(event.target.value=="Nota de Credito" || event.target.value=="Nota de Debito"){
+            
+            sethabili(false)
+            
+            return
+        }
+        sethabili(true)
+        
     }
     const today = new Date().toISOString().split('T')[0];
     console.log(data2);
@@ -256,7 +299,7 @@ export const LibroC = () => {
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Doc Afectado</p>
-                        <input onKeyPress={handleKeyDown} id='docA' defaultValue={new Date().toLocaleDateString('es-VE') + '/ Nombre de usuario/nombre Cliente'} className='col-sm-6' type="text" />
+                        <input onKeyPress={handleKeyDown} id='docA' disabled={habili}  className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Fecha de Registro</p>
@@ -307,7 +350,7 @@ export const LibroC = () => {
                     </div>
                     <div className="row mt-3 justify-content-center ">
                         <p className='row justify-content-center'>Documento</p>
-                        <select className='col-md-6' name="" id="Doc">
+                        <select className='col-md-6' name="" onChange={DocumentoAfec} id="Doc">
                             <option value="Factura">Factura</option>
                             <option value="Nota de Credito">Nota de Credito</option>
                             <option value="Nota de Devito">Nota de Devito</option>
@@ -327,7 +370,7 @@ export const LibroC = () => {
 
 
                     <div className="row mt-2  justify-content-between">
-                        <input className='col-md-5' type="button" value="Digitales" />
+
                         <input className='col-md-5' type="button" value="Calcular Base" />
                     </div>
 
@@ -353,13 +396,9 @@ export const LibroC = () => {
                         <input type="button" className='col-sm-6' value="Totales" />
 
                     </div>
-                    <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-6' value="Cambiar Proveedor" />
 
-                    </div>
                     <div className="row justify-content-center mt-2">
                         <input type="button" className='col-sm-6' onClick={imprimir} value="Libro C" />
-
                     </div>
 
 

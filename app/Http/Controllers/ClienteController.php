@@ -13,7 +13,7 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        return Cliente::all();
+        return Cliente::where('status', "Activado")->get();
     }
     private function generar_id($n) {
         $letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -65,7 +65,7 @@ class ClienteController extends Controller
             'direccion'=>$request['dire'],
             'telefono'=>$request['telef'],
             'numero'=>$request['num'],
-            'sucursal'=>$request['subC'],
+            'status'=>"Activado",
             'contribuyente'=>$request['con'],
             'patente'=>$request['paten'],
             'cajaregistradora'=>$request['regis'],
@@ -88,16 +88,37 @@ class ClienteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cliente $cliente)
+    public function update(Request $request,  $cl)
     {
-        //
+       $cliente= Cliente::where("codi",$cl)->first();
+       if ($cliente){
+        $cliente->codi=$request["codi"];
+        $cliente->nombre=$request["nom"];
+        $cliente->representante=$request["rep"];
+        $cliente->rif=$request["rif"];
+        $cliente->direccion=$request["dire"];
+        $cliente->telefono=$request["telef"];
+        $cliente->numero=$request["num"];
+        $cliente->contribuyente=$request["con"];
+        $cliente->patente=$request["paten"];
+        $cliente->cajaregistradora=$request["regis"];
+        $cliente->save();
+
+       }
+
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cliente $cliente)
+    public function destroy( $cliente)
     {
-        //
+        $cliente= Cliente::where("codi",$cliente)->first();
+        if($cliente){
+            $cliente->status='Desactivado';
+            $cliente->save();
+        }
+
     }
 }

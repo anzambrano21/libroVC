@@ -7,16 +7,22 @@ import { Exaplecontect } from "../context/contexto"
 
 export const LibroV = () => {
     const example = useContext(Exaplecontect)
-    console.log(example.datos);
-
+    
     const [data2, setdatos] = useState([]);
-
-
+    const [ban, setban] = useState(false);
+    const [habili, sethabili] = useState(true);
     const consulta = async () => {
         try {
-            console.log(example.datos.codi);
-            let reponse = await axios.get(`http://127.0.0.1:8000/api/LibVenta/${example.datos.codi}`)
-            console.log(reponse);
+            let datos={
+                cidi:example.datos.codi,
+                fecha1:example.datos.fech1,
+                fecha2:example.datos.fech2,
+                
+    
+            }
+            const queryString = new URLSearchParams(datos).toString();
+            let reponse = await axios.get(`http://127.0.0.1:8000/api/libVR?${queryString}`)
+            
             setdatos(reponse.data)
 
 
@@ -73,10 +79,12 @@ export const LibroV = () => {
         } catch (error) {
             alert(error)
         }
+        location.reload();
 
 
     }
     let indice = 0
+    let ide=0
     const handleKeyDown = (e) => {
         let inputs = [document.getElementById('Nf'),
         document.getElementById('Hast'),
@@ -100,7 +108,7 @@ export const LibroV = () => {
             indice++
             if (indice > inputs.length - 1) {
                 registrar()
-                indice = 0;
+                ide = 0;
             }
             inputs[indice].focus()
 
@@ -116,6 +124,42 @@ export const LibroV = () => {
     const exentas = () => {
         ivae = document.getElementById('Ex').value * 0.16;
         document.getElementById('MonCan').value = document.getElementById('isvg').value - ivae
+    }
+    const Modificar= async()=> {
+        let user = {
+            Nf: document.getElementById('Nf').value,
+            Hast: document.getElementById('Hast').value,
+            Con: document.getElementById("Con").value,
+            DocA: document.getElementById('docA').value,
+            Ff: document.getElementById('Ff').value,
+            Fr: document.getElementById('Fr').value,
+            rif: document.getElementById('rif').value,
+            cli: example.datos.codi,
+            User: example.datos.user,
+            MonIsv: document.getElementById('monisv').value,
+            Ex: document.getElementById('Ex').value,
+            Bg: document.getElementById('Bg').value,
+            isvg: document.getElementById('isvg').value,
+            CajaR: document.getElementById('CajaR').value,
+            ivaex: ivae,
+            Moncan: document.getElementById('MonCan').value,
+            MonIGTF: document.getElementById('MonIGTF').value,
+            por: document.getElementById('porcen').value,
+            Facp: document.getElementById('FacPol').value,
+            Doc: document.getElementById('Documento').value,
+            mondol: document.getElementById('monto$').value,
+            tasa: document.getElementById('tasa').value,
+        }
+        const response = await fetch(`http://127.0.0.1:8000/api/LibVenta/${indice}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+        });
+        indice=null 
+        console.log(1);
+        
     }
     function completar(index) {
         indice = data2[index].id
@@ -170,6 +214,23 @@ export const LibroV = () => {
     const eliminar= async()=>{
         axios.delete(`http://127.0.0.1:8000/api/LibVenta/${indice}`)
         indice=null
+    }
+    const Reten=()=>{
+        setban(!ban)
+        console.log(12);
+        
+    }
+    const DocumentoAfec=(event)=>{
+        
+        
+        if(event.target.value=="Nota de Credito" || event.target.value=="Nota de Debito"){
+            
+            sethabili(false)
+            
+            return
+        }
+        sethabili(true)
+        
     }
 
     return (
@@ -240,6 +301,37 @@ export const LibroV = () => {
                     </tbody>
                 </table>
             </div>
+            <div className={`Datos3 RetenV ${ban ? '':"None"} `}>
+                    <div className="row">
+                    <p className='col-sm-5'>Numero</p>
+                    <input onKeyPress={handleKeyDown} id='Ntf'  className='col-sm-6' type="number" />
+                    </div>
+                    <div className="row">
+                    <p className='col-sm-5'>RIF</p>
+                    <input onKeyPress={handleKeyDown} id='RIF'  className='col-sm-6' type="number" />
+                    </div>
+                    <div className="row">
+                    <p className='col-sm-5'>Fecha Registro Retenciones</p>
+                    <input onKeyPress={handleKeyDown} id='FRR'  className='col-sm-6' type="date" />
+                    </div>
+                    <div className="row">
+                    <p className='col-sm-5'>Comprovante</p>
+                    <input onKeyPress={handleKeyDown} id='Compro'  className='col-sm-6' type="text" />
+                    </div>
+                    <div className="row">
+                    <p className='col-sm-5'>Fecha Comprobante</p>
+                    <input onKeyPress={handleKeyDown} id='FComp'  className='col-sm-6' type="date" />
+                    </div>
+                    <div className="row">
+                    <p className='col-sm-5'>% Retencion</p>
+                    <input onKeyPress={handleKeyDown} id='porReten'  className='col-sm-6' type="number" />
+                    </div>
+                    <div className="row">
+                    <p className='col-sm-5'>Retencion</p>
+                    <input onKeyPress={handleKeyDown} id='Reten'  className='col-sm-6' type="number" />
+                    </div>
+
+                </div>
             <div className="formulario mt-5  d-flex justify-content-center">
                 <div className='Datos col-md-4'>
                     <div className=' row '>
@@ -256,7 +348,7 @@ export const LibroV = () => {
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Doc Afectado</p>
-                        <input onKeyPress={handleKeyDown} id='docA' defaultValue={new Date().toLocaleDateString('es-VE') + '/' + example.datos.user + '/' + example.datos.clien} className='col-sm-6' type="text" />
+                        <input onKeyPress={handleKeyDown} id='docA' disabled={habili}  className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Fecha Factura</p>
@@ -305,7 +397,7 @@ export const LibroV = () => {
 
                     <div className="row ">
                         <p className='col-sm-7'>Documento</p>
-                        <select className='col-5 align-self-start' name="" id="Documento">
+                        <select className='col-5 align-self-start' onChange={DocumentoAfec}   name="" id="Documento">
                             <option value="Factura">Factura</option>
                             <option value="Nota de Credito">Nota de Credito</option>
                             <option value="Nota de Debito">Nota de Debito</option>
@@ -355,20 +447,11 @@ export const LibroV = () => {
                         <p className='col-sm-7'>Monto IGTF</p>
                         <input onKeyPress={handleKeyDown} id='MonIGTF' className='col-sm-5' type="text" />
                     </div>
-                    <div className="row  justify-content-between">
-                        <button className='col-sm-5 '>Registradora 10%</button>
-                        <button className='col-sm-5'>Soberanos</button>
-
-                    </div>
                     <div className="row mt-2 justify-content-between">
-                        <button className='col-sm-5 '> digitales</button>
                         <button className='col-sm-5 ml-3'>Calcular Impuesto</button>
-                    </div>
-                    <div className="row mt-2  justify-content-between">
-
                         <button className='col-sm-5'>Calcular base</button>
-                        <button className='col-sm-5 mr-3'>Recuperar % Usado</button>
                     </div>
+
 
 
 
@@ -384,11 +467,11 @@ export const LibroV = () => {
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Eliminar" />
+                        <input type="button" className='col-sm-5' value="Eliminar" onClick={eliminar} />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Modificar" />
+                        <input type="button" className='col-sm-5' value="Modificar" onClick={Modificar}/>
 
                     </div>
                     <div className="row justify-content-center mt-2">
@@ -419,8 +502,13 @@ export const LibroV = () => {
                         <input type="button" className='col-sm-5' value="Salir" />
 
                     </div>
+                    <div className="row justify-content-center mt-2">
+                        <input type="button" className='col-sm-5' value="retencion" onClick={Reten} />
+
+                    </div>
                 </div>
             </div>
+
         </div>
     )
 }

@@ -7,21 +7,19 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Importa los estilos
 import dayjs from "dayjs"; // ES 2015
 
+import Select from 'react-select';
 
 
 
 
-const events = [
-    {
-        title: 'Evento importante',
-        start: new Date(2024, 7, 10),
-        end: new Date(2024, 7, 12),
-    },]
 export const Activar = () => {
     const [datos, setdatos] = useState(null);
-    const [date, setDate] = useState(null);
+    const [date, setdate] = useState(null);
     const [cliente, setcliente] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [options, setOptions] = useState([]);
+
+    
     useEffect(() => {
         document.title = 'Activcion de Cliente';
         const fetchData = async () => {
@@ -49,21 +47,24 @@ export const Activar = () => {
     const formatDate = (date) => {
         return dayjs(date).format("DD/MM/YYYY");
       };
-    const buscar = async (band) => {
-        let cliente = {
-            codigo: document.getElementById('codi').value,
-            numero: document.getElementById('numero').value,
-            rif: document.getElementById('rif').value,
-            cliente: document.getElementById('cliente').value,
-            contri: document.getElementById('contri').value,
-            ban:band
-        }
-        const response = await axios.post('http://127.0.0.1:8000/api/buscar', cliente)
-        setdatos(response.data) 
-        console.log(response);
 
+    const Optiones = async (clente) => {
+        try {
+            let res = await axios.get(`http://127.0.0.1:8000/api/sucursal/${clente}`)
+            const data = res.data.map(item => ({
+                value: item.codigosucursal,
+                label: item.nombresucursal
+              }));
+            setoptionsucur(data)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
+        }
+        
 
     }
+
     const Activar= ()=>{
         if (cliente!=null && date!=null) {
             let activado={
@@ -85,16 +86,51 @@ export const Activar = () => {
         
     }
     function completar(index) {
-        console.log(cliente);
         
+        Sucursal(datos[index].codi)
         setcliente(datos[index])
+        
         document.getElementById("codi").value=datos[index].codi
         document.getElementById("numero").value=datos[index].numero
         document.getElementById("numero").value=datos[index].numero
         document.getElementById("rif").value=datos[index].rif
         document.getElementById("cliente").value=datos[index].nombre
         document.getElementById("contri").value=datos[index].contribuyente
+        
     }
+
+    const Mensual=()=>{
+        let fechaA= new Date()
+        fechaA.setDate(fechaA.getDate() - 29)
+        setdate([fechaA,new Date()])
+    }
+    const Quinsenal=()=>{
+        let fechaA= new Date()
+        fechaA.setDate(fechaA.getDate() - 14)
+        setdate([fechaA,new Date()])
+    }
+    const Semanal=()=>{
+        let fechaA= new Date()
+        fechaA.setDate(fechaA.getDate() - 6)
+        setdate([fechaA,new Date()])
+    }
+    const Sucursal= async (codi)=>{
+        if(codi!=null){
+            
+            let response = await axios.get  (`http://127.0.0.1:8000/api/sucursal/${codi}`)
+            const data = response.data.map(item => ({
+                value: item.nombresucursal,
+                label: item.nombresucursal
+            }));
+            console.log(data);
+            
+            setOptions(data)
+
+            setsucursal(response.data)
+        }
+        
+    }
+
     return (
         <div>
             <div className="tabla2">
@@ -150,25 +186,29 @@ export const Activar = () => {
                             <option value="Especial">Especial</option>
                         </select>
                     </div>
+                    <div className=' row '>
+                        <p className='col-sm-4'>Sucursal</p>
+                        <Select
+                            options={options}
+                            id='sucursal'
+                            className='col-7 align-self-start'
+                            placeholder="sucursal"
+                            isClearable
+                        />
+                    </div>
 
                 </div>
                 <div className='datos2 col-md-4 '>
                     <div className="row  justify-content-around">
-                        <Calendar selectRange={true} onChange={setDate}  />
+                        <Calendar value={date} selectRange={true} onChange={setdate}  />
                     </div>
                     <h5 className='row  justify-content-around'>Fecha de Reporte</h5>
-                    <div className="row">
-                        <p className="col-sm-3">Inicial</p>
-                        <input className="col-sm-3" type="date" name="" id="" />
-                        <p className="col-sm-3">final</p>
-                        <input className="col-sm-3" type="date" name="" id="" />
+                    <div className="row justify-content-around">
+                        <input className="col-sm-5" type="button" value="Mensual" onClick={Mensual} />
+                        <input className="col-sm-5" type="button" value="Quincenal" onClick={Quinsenal} />
                     </div>
                     <div className="row justify-content-around">
-                        <input className="col-sm-5" type="button" value="Mensual" />
-                        <input className="col-sm-5" type="button" value="Quincenal" />
-                    </div>
-                    <div className="row justify-content-around">
-                        <input className="col-sm-5" type="button" value="Semanal" />
+                        <input className="col-sm-5" type="button" value="Semanal" onClick={Semanal} />
                         
                     </div>
 
@@ -179,11 +219,11 @@ export const Activar = () => {
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" onClick={()=> buscar(false)} className='col-sm-5' value="Rastro" />
+                        <input type="button"  className='col-sm-5' value="Rastro" />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' onClick={()=> buscar(true)} value="Sucursales" />
+                        <input type="button" className='col-sm-5' onClick={Sucursal} value="Sucursales" />
 
                     </div>
                     <div className="row justify-content-center mt-2">

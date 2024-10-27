@@ -12,8 +12,15 @@ export const RetenC = () => {
     const [data2, setdatos] = useState([]);
     const consulta= async ()=>{
         try {
-            console.log(example.datos.codi);
-            let reponse = await axios.get(`http://127.0.0.1:8000/api/LibVenta/${example.datos.codi}`)
+            let datos={
+                cidi:example.datos.codi,
+                fecha1:example.datos.fech1,
+                fecha2:example.datos.fech2,
+                
+    
+            }
+            const queryString = new URLSearchParams(datos).toString();
+            let reponse = await axios.get(`http://127.0.0.1:8000/api/libVR?${queryString}`)
             console.log(reponse);
             setdatos(reponse.data)
             
@@ -39,7 +46,8 @@ export const RetenC = () => {
         ivae = document.getElementById('Ex').value * 0.16;
         document.getElementById('MonCan').value = document.getElementById('isvg').value - ivae
     }
-    let indi;
+    let indi=null;
+
     function completar(index) {
         indi = data2[index].id
         document.getElementById('Nf').value = data2[index].numfactur
@@ -73,8 +81,9 @@ export const RetenC = () => {
             reten:document.getElementById('Reten').value
         }
 
-        const response = await axios.put(`http://127.0.0.1:8000/api/LibVenta/${indi}`, user);
+        const response = await axios.put(`http://127.0.0.1:8000/api/Creten/${indi}`, user);
         console.log(response);
+        indi!=null
 
 
     }
@@ -104,7 +113,7 @@ export const RetenC = () => {
             // Puedes ajustar esto según tu estructura de componentes
 
             indice++
-            if (indice > inputs.length - 1) {
+            if (indice > inputs.length - 1 && indi!=null) {
                 
                 registrar()
                 indice = 0;

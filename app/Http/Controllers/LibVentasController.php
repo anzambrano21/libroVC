@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\libVentas;
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 class LibVentasController extends Controller
 {
     /**
@@ -53,23 +53,64 @@ class LibVentasController extends Controller
      */
     public function show( $libVentas)
     {
+        $cidi = request('cidi');
+        $fecha1 = Carbon::createFromFormat('d/m/Y', request('fecha1'))->format('Y/m/d');
+        $fecha2 = Carbon::createFromFormat('d/m/Y', request('fecha2'))->format('Y/m/d');
         
-        return libVentas::where("cliente",$libVentas)->get();
+        return libVentas::where("cliente",$cidi)->whereBetween("fecharegistro",[$fecha1,$fecha2])->get();
+    }
+    public function librV() {
+        $cidi = request('cidi');
+        $fecha1 = Carbon::createFromFormat('d/m/Y', request('fecha1'))->format('Y/m/d');
+        $fecha2 = Carbon::createFromFormat('d/m/Y', request('fecha2'))->format('Y/m/d');
+        
+        return libVentas::where("cliente",$cidi)->whereBetween("fecharegistro",[$fecha1,$fecha2])->get();
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, libVentas $libVentas)
+    public function update(Request $request, $id)
     {
-        //
+        $registro=libVentas::findOrFail($id);
+        $registro->numfactur=$request["Nf"];
+        $registro->hasta=$request["Hast"];
+        $registro->control=$request["Con"];
+        $registro->docafecta=$request["DocA"];
+        $registro->fechafactur=$request["Ff"];
+        $registro->fecharegistro=$request["Fr"];
+        $registro->rif=$request["rif"];
+        $registro->cliente=$request["cli"];
+        $registro->montoimputotal=$request["MonIsv"];
+        $registro->basee=$request["Ex"];
+        $registro->ivae=$request["ivaex"];
+        $registro->basenacional=$request["Bg"];
+        $registro->impunacional=$request["isvg"];
+        $registro->registradora=$request["CajaR"];
+        $registro->porcentaje=$request["por"];
+        $registro->docpolar1=$request["Facp"];
+        $registro->Impuesto=$request["Moncan"];
+        $registro->igtfdolares=$request["mondol"];
+        $registro->igtfmontosobre=$request["MonIGTF"];
+        $registro->documento=$request["Doc"];
+        $registro->save();
+        return "listo";
+    }
+    function retencion(Request $request, $id)  {
+        $registro=libVentas::findOrFail($id);
+        $registro->poreten=$request["porReten"];
+        $registro->retenmonto=$request["reten"];
+        $registro->comprofecha=$request["fechacom"];
+        $registro->comprobante=$request["compro"];
+        $registro->registrofecha=$request["FechaR"];
+        $registro->save();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(libVentas $libVentas)
+    public function destroy( $libVentas)
     {
-        //
+        libVentas::findOrFail( $libVentas)->delete();
     }
 }

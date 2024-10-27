@@ -24,6 +24,13 @@ class Cliente extends Model
     'cliente',
     ];
     protected $table = 'clientes';
+    protected $primaryKey = 'codi';
+
+    // Si la clave primaria no es autoincremental:
+    public $incrementing = false;
+
+    // Si la clave primaria no es de tipo integer:
+    protected $keyType = 'string';
     use HasFactory;
 
 }
