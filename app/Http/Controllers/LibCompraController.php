@@ -21,23 +21,47 @@ class LibCompraController extends Controller
      */
     public function store(Request $request)
     {
-        libCompra::create([
-            'proveedor'=>$request['prov'],
-            'provedor'=>$request['cli'],
-            'numfactur'=>$request['Nf'],
-            'fechafactur'=>$request['Ff'],
-            'fecharegistro'=>$request['Fr'],
-            'rif'=>$request['rif'],
-            'controlFac'=>$request['codF'],
-            'docafectado'=>$request['docA'],
-            'exentas'=>$request['Ex'],
-            'basegeneral'=>$request['Bi'],
-            'MontoIva'=>$request['isvi'],
-            'facPolar'=>$request['Fp'],
-            'documento'=>$request['Doc'],
-            'pornacional'=>$request['ImN'],
-            'montoimputotal'=>$request['monisv'],
-        ]);
+        if ($request['sucursal']!='null'){
+            libCompra::create([
+                'proveedor'=>$request['prov'],
+                'provedor'=>$request['cli'],
+                'numfactur'=>$request['Nf'],
+                'fechafactur'=>$request['Ff'],
+                'fecharegistro'=>$request['Fr'],
+                'rif'=>$request['rif'],
+                'sucursal'=>$request['sucursal'],
+                'controlFac'=>$request['codF'],
+                'docafectado'=>$request['docA'],
+                'exentas'=>$request['Ex'],
+                'basegeneral'=>$request['Bi'],
+                'MontoIva'=>$request['isvi'],
+                'facPolar'=>$request['Fp'],
+                'documento'=>$request['Doc'],
+                'pornacional'=>$request['ImN'],
+                'montoimputotal'=>$request['monisv'],
+            ]);
+
+        }else{
+            libCompra::create([
+                'proveedor'=>$request['prov'],
+                'provedor'=>$request['cli'],
+                'numfactur'=>$request['Nf'],
+                'fechafactur'=>$request['Ff'],
+                'fecharegistro'=>$request['Fr'],
+                'rif'=>$request['rif'],
+                'controlFac'=>$request['codF'],
+                'docafectado'=>$request['docA'],
+                'exentas'=>$request['Ex'],
+                'basegeneral'=>$request['Bi'],
+                'MontoIva'=>$request['isvi'],
+                'facPolar'=>$request['Fp'],
+                'documento'=>$request['Doc'],
+                'pornacional'=>$request['ImN'],
+                'montoimputotal'=>$request['monisv'],
+            ]);
+
+        }
+        
         return $request;
     }
 
@@ -51,11 +75,15 @@ class LibCompraController extends Controller
     }
     public function buscar()  {
         $cidi = request('cidi');
+        $sucursal=request('sucursal');
         $fecha1 = Carbon::createFromFormat('d/m/Y', request('fecha1'))->format('Y/m/d');
         $fecha2 = Carbon::createFromFormat('d/m/Y', request('fecha2'))->format('Y/m/d');
-        return libCompra::where('provedor', $cidi)
-                            ->whereBetween('fecharegistro', [$fecha1, $fecha2])
-                                ->get();
+        if ($sucursal!='null'){
+            return libCompra::where("provedor",$cidi)->where("sucursal",$sucursal)->whereBetween("fecharegistro",[$fecha1,$fecha2])->get();
+        }else{
+            return libCompra::where("provedor",$cidi)->whereBetween("fecharegistro",[$fecha1,$fecha2])->get();
+        }
+
         
     }
 

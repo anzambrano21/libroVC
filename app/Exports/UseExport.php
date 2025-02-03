@@ -13,11 +13,12 @@ use App\Exports\Provedor;
 class UseExport implements WithMultipleSheets
 {
     private $codigo,$fecha,$fecha2,$hoja;
-    public function __construct($dato1,$dato2,$dato3,$hoja) {
+    public function __construct($dato1,$dato2,$dato3,$hoja,$sucu) {
         $this->codigo=$dato1;
         $this->fecha=$dato2;
         $this->fecha2=$dato3;
         $this->hoja=$hoja;
+        $this->sucursal=$sucu;
     }
     /**
     * @return \Illuminate\Support\Collection
@@ -27,7 +28,7 @@ class UseExport implements WithMultipleSheets
         if($this->hoja=="Compra") {
             return [
             
-                'Hoja 2' => new Compra( $this->codigo,$this->fecha,$this->fecha2),
+                'Libro Compra' => new Compra( $this->codigo,$this->fecha,$this->fecha2,$this->sucursal),
     
                 // Agrega más hojas según tus necesidades
             ];
@@ -35,7 +36,7 @@ class UseExport implements WithMultipleSheets
         }elseif ($this->hoja== 'Venta') {
             return [
             
-                'Hoja 1' => new Ventas( $this->codigo,$this->fecha,$this->fecha2),
+                'Libro Compra2' => new Ventas( $this->codigo,$this->fecha,$this->fecha2,$this->sucursal),
     
                 // Agrega más hojas según tus necesidades
             ];

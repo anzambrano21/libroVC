@@ -18,13 +18,13 @@ export const Activar = () => {
     const [cliente, setcliente] = useState(null);
     const [loading, setLoading] = useState(true);
     const [options, setOptions] = useState([]);
-
+    const [selectedOption, setSelectedOption] = useState(null);
     
     useEffect(() => {
         document.title = 'Activcion de Cliente';
         const fetchData = async () => {
             try {
-                let res = await fetch('http://127.0.0.1:8000/api/cliente');
+                let res = await fetch('http://contaduria.com/api/cliente');
                 let myData = await res.json();
                 setdatos(myData);
               } catch (error) {
@@ -37,7 +37,7 @@ export const Activar = () => {
           fetchData();
       }, []); 
     const example = useContext(Exaplecontect)
-    console.log(example);
+
     if (loading) {
         return <p>Cargando datos...</p>;
       }
@@ -50,7 +50,7 @@ export const Activar = () => {
 
     const Optiones = async (clente) => {
         try {
-            let res = await axios.get(`http://127.0.0.1:8000/api/sucursal/${clente}`)
+            let res = await axios.get(`http://contaduria.com/api/sucursal/${clente}`)
             const data = res.data.map(item => ({
                 value: item.codigosucursal,
                 label: item.nombresucursal
@@ -67,6 +67,8 @@ export const Activar = () => {
 
     const Activar= ()=>{
         if (cliente!=null && date!=null) {
+
+            
             let activado={
                 user:example.datos.user,
                 home:example.datos.home,
@@ -74,7 +76,8 @@ export const Activar = () => {
                 fech1:formatDate(date[0]),
                 fech2:formatDate(date[1]),
                 codi:cliente.codi,
-                clien:cliente.nombre
+                clien:cliente.nombre,
+                sucursal:selectedOption
             } 
             example.setDatos(activado)
             
@@ -117,18 +120,81 @@ export const Activar = () => {
     const Sucursal= async (codi)=>{
         if(codi!=null){
             
-            let response = await axios.get  (`http://127.0.0.1:8000/api/sucursal/${codi}`)
+            let response = await axios.get  (`http://contaduria.com/api/sucursal/${codi}`)
             const data = response.data.map(item => ({
-                value: item.nombresucursal,
+                value: item.codigosucursal,
                 label: item.nombresucursal
             }));
-            console.log(data);
+
             
             setOptions(data)
 
-            setsucursal(response.data)
+
         }
         
+    }
+    const handleChange = (option) => { 
+        setSelectedOption(option.value); 
+        console.log('Opción seleccionada:', option); 
+    };
+    const imprimirC= async()=>{
+        
+        let datos={
+            cidi:example.datos.codi,
+            fecha1:example.datos.fech1,
+            fecha2:example.datos.fech2,
+            sucursal:example.datos.sucursal,
+            hoja:"Compra"
+
+        }
+        console.log(datos);
+        const queryString = new URLSearchParams(datos).toString();
+        try {
+            const response = await axios.get(`http://contaduria.com/export?${queryString}`, {
+                responseType: 'blob', // Importante para manejar archivos binarios
+            });
+            
+            
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'LibroCompra.xlsx'); // Nombre del archivo
+            document.body.appendChild(link);
+            link.click();
+        } catch (error) {
+            alert('Error descargando el archivo:', error);
+        }
+        
+         
+    }
+    const imprimirV = async () => {
+
+        let datos = {
+            cidi: example.datos.codi,
+            fecha1: example.datos.fech1,
+            fecha2: example.datos.fech2,
+            sucursal:example.datos.sucursal,
+            hoja: "Venta"
+        }
+        console.log(datos);
+        const queryString = new URLSearchParams(datos).toString();
+        try {
+            const response = await axios.get(`http://contaduria.com/export?${queryString}`, {
+                responseType: 'blob', // Importante para manejar archivos binarios
+            });
+
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'LibroVenta.xlsx'); // Nombre del archivo
+            document.body.appendChild(link);
+            link.click();
+        } catch (error) {
+            console.error('Error descargando el archivo:', error);
+        }
+
+
     }
 
     return (
@@ -194,6 +260,7 @@ export const Activar = () => {
                             className='col-7 align-self-start'
                             placeholder="sucursal"
                             isClearable
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -227,11 +294,11 @@ export const Activar = () => {
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Imprimir-Ventas" />
+                        <input type="button" className='col-sm-5' value="Imprimir-Ventas" onClick={imprimirV} />
 
                     </div>
                     <div className="row justify-content-center mt-2">
-                        <input type="button" className='col-sm-5' value="Imprimir-Compras" />
+                        <input type="button" className='col-sm-5' value="Imprimir-Compras" onClick={imprimirC} />
 
                     </div>
                     <div className="row justify-content-center mt-2">

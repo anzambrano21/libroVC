@@ -5,36 +5,38 @@ import axios from 'axios';
 import { Exaplecontect } from "../context/contexto"
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Alert } from 'bootstrap';
-
+import '../../css/calcularbase.css'
+import '../../css/LibroC.css'
 export const LibroC = () => {
 
     const [data2, setdatos] = useState([]);
-    
+    const [ban, setban] = useState(false);
     const [habili, sethabili] = useState(true);
     const example = useContext(Exaplecontect)
     console.log(example.datos);
-    
+
     const consulta = async () => {
-        let datos={
-            cidi:example.datos.codi,
-            fecha1:example.datos.fech1,
-            fecha2:example.datos.fech2
+        let datos = {
+            cidi: example.datos.codi,
+            fecha1: example.datos.fech1,
+            fecha2: example.datos.fech2,
+            sucursal: example.datos.sucursal,
         }
-        
-        
+
+
         const queryString = new URLSearchParams(datos).toString();
         try {
-            
-            let reponse = await axios.get(`http://127.0.0.1:8000/api/busCom?${queryString}`)
+
+            let reponse = await axios.get(`http://contaduria.com/api/busCom?${queryString}`)
             console.log(reponse);
             setdatos(reponse.data)
 
 
         } catch (error) {
-           alert(error)
+            alert(error)
 
         }
-        
+
 
     }
     useEffect(() => {
@@ -42,9 +44,9 @@ export const LibroC = () => {
         consulta()
     }, []);
     const registrar = async () => {
-        
-        
-        if (('codi' in example.datos) && indice==null) {
+
+
+        if (('codi' in example.datos) && indice == null) {
             let user = {
                 Nf: document.getElementById('Nf').value,
                 codF: document.getElementById('codF').value,
@@ -53,7 +55,8 @@ export const LibroC = () => {
                 Ff: document.getElementById('Ff').value,
                 rif: document.getElementById('rif').value,
                 cli: example.datos.codi,
-                prov:document.getElementById('cli').value,
+                sucursal: example.datos.sucursal,
+                prov: document.getElementById('cli').value,
                 monisv: document.getElementById('monisv').value,
                 Ex: document.getElementById('Ex').value,
                 Bi: document.getElementById('Bg').value,
@@ -62,25 +65,21 @@ export const LibroC = () => {
                 Doc: document.getElementById('Doc').value,
                 ImN: document.getElementById('In').value,
             }
-    
-    
+
+
             try {
-                const response = await fetch('http://127.0.0.1:8000/api/LibCompra', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(user),
-                });
+                const response = await axios.post('http://contaduria.com/api/LibCompra', user);
+
+
                 alert("Factura Registrada")
-                
+
             } catch (error) {
                 alert(error)
             }
-            location.reload();
+            //location.reload();
 
-            
-        }else{
+
+        } else {
             alert("necesitas Activar un cliente o tratas de registrar la misma Factura")
         }
 
@@ -88,10 +87,10 @@ export const LibroC = () => {
 
 
     }
-    let indice=null
-    let ide=null
+    let indice = null
+    let ide = null
 
-    const Modificar=async()=>{
+    const Modificar = async () => {
         let user = {
             Nf: document.getElementById('Nf').value,
             codF: document.getElementById('codF').value,
@@ -100,7 +99,7 @@ export const LibroC = () => {
             Ff: document.getElementById('Ff').value,
             rif: document.getElementById('rif').value,
             cli: example.datos.codi,
-            prov:document.getElementById('cli').value,
+            prov: document.getElementById('cli').value,
             monisv: document.getElementById('monisv').value,
             Ex: document.getElementById('Ex').value,
             Bi: document.getElementById('Bg').value,
@@ -109,16 +108,16 @@ export const LibroC = () => {
             Doc: document.getElementById('Doc').value,
             ImN: document.getElementById('In').value,
         }
-        const response = await fetch(`http://127.0.0.1:8000/api/LibCompra/${indice}`, {
+        const response = await fetch(`http://contaduria.com/api/LibCompra/${indice}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(user),
         });
-        indice=null
+        indice = null
         alert("Factura Modificado")
-        
+
     }
     const handleKeyDown = (e) => {
         let inputs = [document.getElementById('Nf'),
@@ -139,10 +138,10 @@ export const LibroC = () => {
             // Puedes ajustar esto según tu estructura de componentes
 
             ide++
-            if (ide > inputs.length - 1 && indice==null ) {
+            if (ide > inputs.length - 1 && indice == null) {
                 registrar()
                 ide = 0;
-            }else if(ide > inputs.length - 1 && indice!=null){
+            } else if (ide > inputs.length - 1 && indice != null) {
                 Modificar()
                 ide = 0;
             }
@@ -151,51 +150,52 @@ export const LibroC = () => {
         }
     }
     function completar(index) {
-            indice=data2[index].id
-            document.getElementById('Nf').value=data2[index].numfactur
-            document.getElementById('codF').value=data2[index].controlFac
-            document.getElementById('docA').value=data2[index].docafectado
-            document.getElementById('Fr').value=data2[index].fecharegistro
-            document.getElementById('Ff').value=data2[index].fechafactur
-            document.getElementById('rif').value=data2[index].rif
-            document.getElementById('cli').value=data2[index].provedor
-            document.getElementById('monisv').value=data2[index].montoimputotal
-            document.getElementById('Ex').value=data2[index].exentas
-            document.getElementById('Bg').value=data2[index].basegeneral
-            document.getElementById('Miva').value=data2[index].MontoIva
-            document.getElementById('Fp').value=data2[index].facPolar
-            document.getElementById('Doc').value=data2[index].documento
-            document.getElementById('In').value=data2[index].pornacional
-            
+        indice = data2[index].id
+        document.getElementById('Nf').value = data2[index].numfactur
+        document.getElementById('codF').value = data2[index].controlFac
+        document.getElementById('docA').value = data2[index].docafectado
+        document.getElementById('Fr').value = data2[index].fecharegistro
+        document.getElementById('Ff').value = data2[index].fechafactur
+        document.getElementById('rif').value = data2[index].rif
+        document.getElementById('cli').value = data2[index].provedor
+        document.getElementById('monisv').value = data2[index].montoimputotal
+        document.getElementById('Ex').value = data2[index].exentas
+        document.getElementById('Bg').value = data2[index].basegeneral
+        document.getElementById('Miva').value = data2[index].MontoIva
+        document.getElementById('Fp').value = data2[index].facPolar
+        document.getElementById('Doc').value = data2[index].documento
+        document.getElementById('In').value = data2[index].pornacional
+
 
 
 
     }
-    const Eliminar= async()=>{
-        axios.delete(`http://127.0.0.1:8000/api/LibCompra/${indice}`)
+    const Eliminar = async () => {
+        axios.delete(`http://contaduria.com/api/LibCompra/${indice}`)
         alert("Factura eliminado")
-        indice=null
-        
-        
+        indice = null
+
+
     }
 
-    const imprimir= async()=>{
-        
-        let datos={
-            cidi:example.datos.codi,
-            fecha1:example.datos.fech1,
-            fecha2:example.datos.fech2,
-            hoja:"Compra"
+    const imprimir = async () => {
+
+        let datos = {
+            cidi: example.datos.codi,
+            fecha1: example.datos.fech1,
+            fecha2: example.datos.fech2,
+            sucursal:example.datos.sucursal,
+            hoja: "Compra"
 
         }
         console.log(datos);
         const queryString = new URLSearchParams(datos).toString();
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/export?${queryString}`, {
+            const response = await axios.get(`http://contaduria.com/export?${queryString}`, {
                 responseType: 'blob', // Importante para manejar archivos binarios
             });
-            
-            
+
+
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -205,11 +205,11 @@ export const LibroC = () => {
         } catch (error) {
             alert('Error descargando el archivo:', error);
         }
-        
-         
+
+
     }
 
-    function  BaseGeneral() {
+    function BaseGeneral() {
         let baseG = document.getElementById('Bg').value
         document.getElementById('monisv').value = baseG * (parseInt(document.getElementById('In').value) + 100) / 100
         document.getElementById('Miva').value = baseG * parseInt(document.getElementById('In').value) / 100
@@ -218,17 +218,20 @@ export const LibroC = () => {
 
 
     }
-    const DocumentoAfec=(event)=>{
-        
-        
-        if(event.target.value=="Nota de Credito" || event.target.value=="Nota de Debito"){
-            
+    const DocumentoAfec = (event) => {
+
+
+        if (event.target.value == "Nota de Credito" || event.target.value == "Nota de Debito") {
+
             sethabili(false)
-            
+
             return
         }
         sethabili(true)
-        
+
+    }
+    const calcularBase=()=>{
+        setban(!ban)
     }
     const today = new Date().toISOString().split('T')[0];
     console.log(data2);
@@ -287,6 +290,15 @@ export const LibroC = () => {
                     </tbody>
                 </table>
             </div>
+            <div className={` dialog-container ${ban ? '' : 'None'}`}>
+                <h2>Libro de Ventas</h2>
+                <label htmlFor="factura">Introduzca la base de la factura:</label>
+                <input type="text" id="factura" className="input-box"/>
+                    <div className="button-container">
+                        <button className="btn accept">Aceptar</button>
+                        <button className="btn cancel" onClick={calcularBase}>Cancelar</button>
+                    </div>
+            </div>
             <div className="d-flex formulario mt-4 ml-5 justify-content-around">
                 <div className="Datos col-md-4 ">
                     <div className=' row '>
@@ -299,7 +311,7 @@ export const LibroC = () => {
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Doc Afectado</p>
-                        <input onKeyPress={handleKeyDown} id='docA' disabled={habili}  className='col-sm-6' type="text" />
+                        <input onKeyPress={handleKeyDown} id='docA' disabled={habili} className='col-sm-6' type="text" />
                     </div>
                     <div className=' row '>
                         <p className='col-sm-5'>Fecha de Registro</p>
@@ -339,6 +351,7 @@ export const LibroC = () => {
                     <div className="row justify-content-center">
                         <p className='row justify-content-center'>Factura Polar</p>
                         <select className='col-md-6 ' name="" id="Fp">
+                            <option value=""></option>
                             <option value="Cervesa">Cerveza</option>
                             <option value="Harina">Harina</option>
                             <option value="Ketchup">Ketchup</option>
@@ -371,7 +384,7 @@ export const LibroC = () => {
 
                     <div className="row mt-2  justify-content-between">
 
-                        <input className='col-md-5' type="button" value="Calcular Base" />
+                        <input className='col-md-5' type="button" value="Calcular Base" onClick={calcularBase} />
                     </div>
 
                 </div>

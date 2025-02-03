@@ -20,11 +20,13 @@ export default function Home() {
     let url=currentURL.split('/')[3]
     console.log(url);
     
+    const style = url === '' ? { backgroundColor: '#080710' } : {};
+    
     
     //<a href="#" className="dashboard-nav-item"><i className="fas fa-home"></i>    Home </a>
     return (
-        <div className='dashboard col'>
-            <div className="dashboard-nav">
+        <div className='dashboard col' style={style}>
+            <div className={(url=='')? "None":'dashboard-nav'} >
                 <header><a href="#!" className="menu-toggle"><i className="fas fa-bars"></i></a><a href="#" className="brand-logo"><i
                     className="fas fa-anchor"></i> <span>LOGO</span></a></header>
                 <nav className="dashboard-nav-list"><a href="LibroV" className={(url=="LibroV" )? "dashboard-nav-item active":"dashboard-nav-item"}><i className="fas fa-tachometer-alt"></i> Ventas
@@ -34,7 +36,7 @@ export default function Home() {
                         <div className='dashboard-nav-dropdown-menu'>
                         </div>
                         <div className='dashboard-nav-dropdown'>
-                            <a href="/" className={(url=="" )? "dashboard-nav-item active dashboard-nav-dropdown-toggle":"dashboard-nav-item dashboard-nav-dropdown-toggle"}> Activar </a>
+                            <a href="Activar" className={(url=="Activar" )? "dashboard-nav-item active dashboard-nav-dropdown-toggle":"dashboard-nav-item dashboard-nav-dropdown-toggle"}> Activar </a>
 
                             <div className='dashboard-nav-dropdown'><a href="Reten"
                                 className={(url=="Reten" )? "dashboard-nav-item active dashboard-nav-dropdown-toggle":"dashboard-nav-item dashboard-nav-dropdown-toggle"}>Retenciones</a>
@@ -42,12 +44,12 @@ export default function Home() {
                             <a href="Hoja7" className="dashboard-nav-item"><i className="fas fa-cogs"></i>Hoja 7 </a><a href="IGTF"
                                 className="dashboard-nav-item"><i className="fas fa-user"></i> IGTF </a>
                             <div className="nav-item-divider"></div>
-                            <a href="/inicio" className="dashboard-nav-item"><i className="fas fa-sign-out-alt"></i> Logout </a>
+                            <a href="/" className="dashboard-nav-item"><i className="fas fa-sign-out-alt"></i> Logout </a>
                         </div>
                     </div>
                 </nav>
             </div>
-            <div className='dashboard-app col-1'>
+            <div className='dashboard-app col-1' >
                 <BrowserRouter>
 
                     <Routes>
@@ -56,12 +58,12 @@ export default function Home() {
 
                         <Route path='/LibroV' element={<LibroV />} />
                         <Route path='/LibroC' element={<LibroC />} />
-                        <Route path='/inicio' element={<Inicio />} />
+                        <Route path='/' element={<Inicio />} />
                         <Route path='/IGTF' element={<IGTF />} />
                         <Route path='/Hoja7' element={<Hoja7 />} />
                         <Route path='/Reten' element={<RetenC />} />
                         <Route path='/Cliente' element={<Cliente />} />
-                        <Route path='/' element={<Activar />} />
+                        <Route path='/Activar' element={<Activar />} />
                         <Route path='/Registro' element={<Registro />} />
 
 
@@ -75,7 +77,6 @@ export default function Home() {
 
     );
 }
-console.log("error")
 if (document.getElementById('codeareact')) {
     
     createRoot(document.getElementById('codeareact')).render(

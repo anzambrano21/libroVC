@@ -19,7 +19,9 @@ html {
 nav {
     display: block;
 }
-
+.None{
+    display: none;
+}
 .containermenu {
     margin: 0;
     font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",

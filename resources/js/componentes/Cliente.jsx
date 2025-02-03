@@ -20,7 +20,7 @@ export const Cliente = () => {
         document.title = 'Registro de Cliente';
         const fetchData = async () => {
             try {
-                let res = await fetch('http://127.0.0.1:8000/api/cliente');
+                let res = await fetch('http://contaduria.com/api/cliente');
                 let myData = await res.json();
                 setData(myData);
                 setDataT(myData);
@@ -107,7 +107,7 @@ export const Cliente = () => {
                 regis: tipoRegistradora,
 
             }
-            let response = await axios.put(`http://127.0.0.1:8000/api/cliente/${document.getElementById('cod').value}`, user)
+            let response = await axios.put(`http://contaduria.com/api/cliente/${document.getElementById('cod').value}`, user)
             console.log(response);
             return
         }
@@ -127,26 +127,26 @@ export const Cliente = () => {
             regis: tipoRegistradora,
 
         }
-        let response = await axios.post('http://127.0.0.1:8000/api/cliente', user)
+        let response = await axios.post('http://contaduria.com/api/cliente', user)
         console.log(response);
         alert("Cliente Registrado")
         limpieza()
 
     }
     const eliminar = async () => {
-        let response = await axios.delete(`http://127.0.0.1:8000/api/cliente/${indice}`)
+        let response = await axios.delete(`http://contaduria.com/api/cliente/${indice}`)
         console.log(response);
     }
     const Sucursal= async ()=>{
         if(indice!=null){
             setban(!ban)
-            let response = await axios.get  (`http://127.0.0.1:8000/api/sucursal/${indice}`)
+            let response = await axios.get  (`http://contaduria.com/api/sucursal/${indice}`)
             setsucursal(response.data)
         }
         
     }
     function limpieza() {
-        indice=null
+        setIndice(null)
         document.getElementById('cod').value = null
         document.getElementById('Nom').value = null
         document.getElementById('Rep').value = null
@@ -163,7 +163,7 @@ export const Cliente = () => {
 
             }
             setban(!ban)
-            let response = await axios.post(`http://127.0.0.1:8000/api/sucursal`,sucur)
+            let response = await axios.post(`http://contaduria.com/api/sucursal`,sucur)
             setsucursal(response.data)
         }
     }
@@ -175,7 +175,7 @@ export const Cliente = () => {
 
             }
             setban(!ban)
-            let response = await axios.put(`http://127.0.0.1:8000/api/sucursal/${indice2}`,sucur)
+            let response = await axios.put(`http://contaduria.com/api/sucursal/${indice2}`,sucur)
             
         }
     }
@@ -386,7 +386,7 @@ export const Cliente = () => {
 
                     <div className="row justify-content-around mb-3">
                         <input type="button" value="Actualizar" className="col-md-5" />
-                        <input type="button" value="Limpiar" className="col-md-5" />
+                        <input type="button" value="Limpiar" className="col-md-5"  onClick={limpieza}/>
                     </div>
 
                     <div className="row justify-content-around mb-3">

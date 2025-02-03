@@ -20,7 +20,36 @@ class LibVentasController extends Controller
      */
     public function store(Request $request)
     {
-        
+        if ($request['sucursal']!='null'){
+                   
+        libVentas::create([
+            "numfactur"=>$request["Nf"],
+            "hasta"=>$request["Hast"],
+            "control"=>$request["Con"],
+            "docafecta"=>$request["DocA"],
+            "fechafactur"=>$request["Ff"],
+            "fecharegistro"=>$request["Fr"],
+            "rif"=>$request["rif"],
+            "cliente"=>$request["cli"],
+            "montoimputotal"=>$request["MonIsv"],
+            'sucursal'=>$request['sucursal'],
+            "basee"=>$request["Ex"],
+            "ivae"=>$request["ivaex"],
+            "basenacional"=>$request["Bg"],
+            "impunacional"=>$request["isvg"],
+            "registradora"=>$request["CajaR"],
+            "porcentaje"=>$request["por"],
+            "docpolar1"=>$request["Facp"],
+            "Impuesto"=>$request["Moncan"],
+            "igtfdolares"=>$request["mondol"],
+            "igtfmontosobre"=>$request["MonIGTF"],
+            "documento"=>$request["Doc"]
+            
+
+        ]);
+
+        }else{
+                   
         libVentas::create([
             "numfactur"=>$request["Nf"],
             "hasta"=>$request["Hast"],
@@ -45,6 +74,9 @@ class LibVentasController extends Controller
             
 
         ]);
+        }
+
+ 
         return $request;
     }
 
@@ -61,10 +93,20 @@ class LibVentasController extends Controller
     }
     public function librV() {
         $cidi = request('cidi');
+        $sucursal=request('sucursal');
         $fecha1 = Carbon::createFromFormat('d/m/Y', request('fecha1'))->format('Y/m/d');
         $fecha2 = Carbon::createFromFormat('d/m/Y', request('fecha2'))->format('Y/m/d');
+        if ($sucursal!='null'){
+            return libVentas::where("cliente",$cidi)->where("sucursal",$sucursal)->whereBetween("fecharegistro",[$fecha1,$fecha2])->get();
+        }else{
+            return libVentas::where("cliente",$cidi)->whereBetween("fecharegistro",[$fecha1,$fecha2])->get();
+        }
+
+ 
         
-        return libVentas::where("cliente",$cidi)->whereBetween("fecharegistro",[$fecha1,$fecha2])->get();
+        
+        
+        
     }
 
     /**

@@ -11,7 +11,7 @@ export const Registro = () => {
         document.title = 'Registro de Cliente';
         const fetchData = async () => {
             try {
-                let res = await fetch('http://127.0.0.1:8000/api/usuario');
+                let res = await fetch('http://contaduria.com/api/usuario');
                 let myData = await res.json();
                 setData(myData);
               } catch (error) {
@@ -39,7 +39,7 @@ export const Registro = () => {
             fC: document.getElementById('fecha_contratacion').value,
             permiso: document.getElementById('nivel_permiso').value,
         }
-        const response = await axios.post('http://127.0.0.1:8000/api/usuario', user)
+        const response = await axios.post('http://contaduria.com/api/usuario', user)
         console.log(response.data);
 
     }

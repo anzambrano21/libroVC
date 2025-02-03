@@ -46,7 +46,8 @@ class libVentas extends Model
     'impuesto',
     'porcentaje',
     'basenacional',
-    'impunacional'
+    'impunacional',
+    'sucursal'
     ];
     protected $table = 'lib_ventas';
     use HasFactory;
